@@ -5,16 +5,20 @@ import lombok.Data;
 
 import java.util.List;
 
+
 @Entity
 @Data
-@Table(name="questions")
-public class Question {
+@Table(name = "discussion")
+public class Discussion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long questionId;
-    private String description;
+    private Long discussionId;
     @ManyToOne
+    private Assembly assembly;
+
+    @OneToOne
+    @JoinColumn(name = "survey_id")
     private Survey survey;
-    @OneToMany(mappedBy = "question")
-    private List<Choice> choices;
+
+
 }

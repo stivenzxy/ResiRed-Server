@@ -20,8 +20,9 @@ public class Assembly {
     private LocalDate date;
     private LocalTime time;
 
-    @OneToMany
-    private List<Survey> survey;
+    @OneToMany(mappedBy = "assembly")
+    private List<Discussion> discussion;
+
     @OneToMany
     private List<User> attendees;
 }
