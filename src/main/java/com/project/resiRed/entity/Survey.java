@@ -13,8 +13,14 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyId;
     private String topic;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
     @OneToMany(mappedBy = "survey")
     private List<Question> questions;
+
     @OneToOne(mappedBy = "survey")
     private Discussion discussion;
 }

@@ -23,6 +23,6 @@ public class Assembly {
     @OneToMany(mappedBy = "assembly")
     private List<Discussion> discussion;
 
-    @OneToMany
-    private List<User> attendees;
+    @OneToMany(mappedBy = "assembly")
+    private List<Participant> participants;
 }

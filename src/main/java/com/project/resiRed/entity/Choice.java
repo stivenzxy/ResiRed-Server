@@ -15,6 +15,7 @@ public class Choice {
     private String description;
     private int votes;
     @ManyToOne
+    @JoinColumn(name="question_id")
     private Question question;
 
 }

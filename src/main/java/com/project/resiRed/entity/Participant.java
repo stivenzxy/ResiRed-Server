@@ -1,24 +1,24 @@
 package com.project.resiRed.entity;
 
+
 import jakarta.persistence.*;
 import lombok.Data;
 
 
 @Entity
 @Data
-@Table(name = "discussion")
-public class Discussion {
+@Table (name="participants")
+public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long discussionId;
-
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "assembly_id")
     private Assembly assembly;
 
-    @OneToOne
-    @JoinColumn(name = "survey_id")
-    private Survey survey;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-
+    private Boolean attendance;
 }

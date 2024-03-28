@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class ChoiceDto {
-    private Long choiceId;
-    private String decription;
+    private String description;
     private int votes;
 }

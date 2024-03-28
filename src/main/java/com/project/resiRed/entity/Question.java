@@ -14,6 +14,7 @@ public class Question {
     private Long questionId;
     private String description;
     @ManyToOne
+    @JoinColumn(name="survey_id")
     private Survey survey;
     @OneToMany(mappedBy = "question")
     private List<Choice> choices;
