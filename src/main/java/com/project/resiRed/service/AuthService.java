@@ -21,13 +21,13 @@ import javax.management.relation.Role;
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final  JwtService jwtService;
+    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     public AuthResponse login(LoginRequest request){
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
-        UserDetails user=userRepository.findUserByEmail(request.getEmail()).orElseThrow();
+        User user=userRepository.findUserByEmail(request.getEmail()).orElseThrow();
         String token= jwtService.getToken(user);
         return AuthResponse.builder()
                 .token(token)
@@ -40,7 +40,7 @@ public class AuthService {
                 .address(request.getAddress())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
-                .role(UserRole.USER)
+                .role(UserRole.OWNER)
                 .build();
         userRepository.save(user);
         return AuthResponse.builder()
