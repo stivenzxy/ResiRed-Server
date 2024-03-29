@@ -3,6 +3,7 @@ package com.project.resiRed.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.project.resiRed.entity.User;
 import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.dto.SurveyDto;
 import com.project.resiRed.dto.QuestionDto;
@@ -10,6 +11,7 @@ import com.project.resiRed.dto.ChoiceDto;
 import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.repository.QuestionRepository;
 import com.project.resiRed.repository.ChoiceRepository;
+import com.project.resiRed.repository.UserRepository;
 
 import com.project.resiRed.entity.Survey;
 import com.project.resiRed.entity.Question;
@@ -26,31 +28,29 @@ public class SurveyService {
     private final SurveyRepository surveyRepository;
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
+    private final UserRepository userRepository;
 
-    public Survey createSurvey(SurveyDto surveyDto) {
+    public Survey createSurvey(SurveyDto surveyDto, String email) {
 
         Survey survey = new Survey();
         survey.setTopic(surveyDto.getTopic());
-
-        List<Question> questions = new ArrayList<>();
+        User user = userRepository.findUserByEmail(email).get();
+        survey.setUser(user);
+        surveyRepository.save(survey);
 
         for (QuestionDto questionDto : surveyDto.getQuestions()) {
             Question question = new Question();
             question.setDescription(questionDto.getDescription());
             question.setSurvey(survey);
             questionRepository.save(question);
-                for (ChoiceDto choiceDto : questionDto.getChoices()) {
+                for (String choiceStr : questionDto.getChoices()) {
                     Choice choice = new Choice();
-                    choice.setDescription(choiceDto.getDescription());
+                    choice.setDescription(choiceStr);
                     choice.setQuestion(question);
+                    choice.setVotes(0);
                     choiceRepository.save(choice);
                 }
-
-            questions.add(question);
         }
-
-        survey.setQuestions(questions);
-        surveyRepository.save(survey);
 
         return survey;
     }

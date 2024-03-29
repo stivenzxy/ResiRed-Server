@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 public class QuestionDto {
     private String description;
-    private List<ChoiceDto> choices;
+    private List<String> choices;
 }

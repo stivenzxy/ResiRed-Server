@@ -8,6 +8,5 @@ import java.util.List;
 @Data
 public class SurveyDto {
     private String topic;
-    private Long userId;
     private List<QuestionDto> questions;
 }
