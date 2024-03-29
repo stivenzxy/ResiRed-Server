@@ -40,8 +40,9 @@ public class AuthService {
                 .address(request.getAddress())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
-                .role(UserRole.OWNER)
+                .role(UserRole.ADMIN)
                 .build();
+
         userRepository.save(user);
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))

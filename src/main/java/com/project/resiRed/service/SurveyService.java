@@ -7,7 +7,7 @@ import com.project.resiRed.entity.User;
 import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.dto.SurveyDto;
 import com.project.resiRed.dto.QuestionDto;
-import com.project.resiRed.dto.ChoiceDto;
+
 import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.repository.QuestionRepository;
 import com.project.resiRed.repository.ChoiceRepository;
@@ -17,8 +17,9 @@ import com.project.resiRed.entity.Survey;
 import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Choice;
 
-
-
+import com.project.resiRed.controller.ApiResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +31,7 @@ public class SurveyService {
     private final ChoiceRepository choiceRepository;
     private final UserRepository userRepository;
 
-    public Survey createSurvey(SurveyDto surveyDto, String email) {
+    public ApiResponse createSurvey(SurveyDto surveyDto, String email) {
 
         Survey survey = new Survey();
         survey.setTopic(surveyDto.getTopic());
@@ -51,8 +52,7 @@ public class SurveyService {
                     choiceRepository.save(choice);
                 }
         }
-
-        return survey;
+        return ApiResponse.builder().detail("Survey created").build();
     }
 
 }
