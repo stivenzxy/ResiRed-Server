@@ -40,8 +40,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @OneToMany(mappedBy = "user")
-    private List<Participant> participants;
+    @ManyToMany(mappedBy = "users")
+    private List<Assembly> assemblies;
 
     @OneToMany(mappedBy = "user")
     private List<Survey> surveys;

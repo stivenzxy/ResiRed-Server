@@ -23,6 +23,10 @@ public class Assembly {
     @OneToMany(mappedBy = "assembly")
     private List<Discussion> discussion;
 
-    @OneToMany(mappedBy = "assembly")
-    private List<Participant> participants;
+    @ManyToMany
+    @JoinTable(name = "attendance",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "assembly_id")
+    )
+    private List<User> users;
 }
