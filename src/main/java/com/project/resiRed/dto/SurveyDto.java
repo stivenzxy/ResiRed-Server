@@ -1,13 +1,19 @@
 package com.project.resiRed.dto;
 
-import com.project.resiRed.entity.Question;
+import com.project.resiRed.dto.QuestionDto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SurveyDto {
-    private Long surveyId;
     private String topic;
-    private List<Question> questions;
+    private List<QuestionDto> questions;
 }

@@ -20,8 +20,13 @@ public class Assembly {
     private LocalDate date;
     private LocalTime time;
 
-    @OneToMany
-    private List<Survey> survey;
-    @OneToMany
-    private List<User> attendees;
+    @OneToMany(mappedBy = "assembly")
+    private List<Discussion> discussion;
+
+    @ManyToMany
+    @JoinTable(name = "attendance",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "assembly_id")
+    )
+    private List<User> users;
 }
