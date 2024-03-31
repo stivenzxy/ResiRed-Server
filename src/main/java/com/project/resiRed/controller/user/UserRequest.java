@@ -1,4 +1,4 @@
-package com.project.resiRed.dto;
+package com.project.resiRed.controller.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserRequest {
     int userId;
     String email;
     String firstname;
