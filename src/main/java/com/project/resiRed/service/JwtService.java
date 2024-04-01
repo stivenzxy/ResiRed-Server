@@ -64,6 +64,7 @@ public class JwtService {
 
         Optional<RefreshToken> existingToken = refreshTokenRepository.findByUser(user);
         if (existingToken.isPresent()) {
+            // existingToken.get().setExpirationDate(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 3));
             return existingToken.get().getToken();
         } else {
             RefreshToken newToken = new RefreshToken();
