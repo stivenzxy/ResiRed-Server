@@ -43,8 +43,7 @@ public class surveyController {
             );
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    MessageDto.builder().detail("Insufficient permissions").build()
-            );
+                    MessageDto.builder().detail("Insufficient permissions").build());
         }
 
     }
