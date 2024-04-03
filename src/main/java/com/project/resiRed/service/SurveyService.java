@@ -2,7 +2,7 @@ package com.project.resiRed.service;
 
 import com.project.resiRed.entity.User;
 import com.project.resiRed.dto.MessageDto;
-import com.project.resiRed.dto.SurveyDto.SurveyRequestDto;
+import com.project.resiRed.dto.SurveyDto;
 import com.project.resiRed.dto.QuestionDto;
 
 import com.project.resiRed.repository.SurveyRepository;
@@ -23,19 +23,17 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class SurveyService {
     private final SurveyRepository surveyRepository;
-    private final QuestionRepository questionRepository;
-    private final ChoiceRepository choiceRepository;
     private final UserRepository userRepository;
 
-    public MessageDto createSurvey(SurveyRequestDto surveyRequestDto, String email) {
+    public MessageDto createSurvey(SurveyDto surveyDto, String email) {
 
         Survey survey = new Survey();
-        survey.setTopic(surveyRequestDto.getTopic());
+        survey.setTopic(surveyDto.getTopic());
         User user = userRepository.findUserByEmail(email).get();
         survey.setUser(user);
         survey.setQuestions(new ArrayList<>());
 
-        for (QuestionDto questionDto : surveyRequestDto.getQuestions()) {
+        for (QuestionDto questionDto : surveyDto.getQuestions()) {
             Question question = new Question();
             question.setDescription(questionDto.getDescription());
             question.setSurvey(survey);

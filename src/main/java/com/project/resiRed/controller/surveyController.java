@@ -6,7 +6,7 @@ import com.project.resiRed.entity.Survey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.project.resiRed.dto.SurveyDto.SurveyRequestDto;
+import com.project.resiRed.dto.SurveyDto;
 import com.project.resiRed.dto.MessageDto;
 
 
@@ -27,7 +27,7 @@ public class surveyController {
     private final SurveyService surveyService;
 
     @PostMapping(value = "create")
-    public  ResponseEntity<MessageDto> createSurvey(@RequestBody SurveyRequestDto surveyRequestDto){
+    public  ResponseEntity<MessageDto> createSurvey(@RequestBody SurveyDto surveyDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -39,7 +39,7 @@ public class surveyController {
 
         if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
             return ResponseEntity.ok(
-                    surveyService.createSurvey(surveyRequestDto, userDetails.getUsername())
+                    surveyService.createSurvey(surveyDto, userDetails.getUsername())
             );
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(

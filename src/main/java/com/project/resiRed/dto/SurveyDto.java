@@ -1,4 +1,4 @@
-package com.project.resiRed.dto.SurveyDto;
+package com.project.resiRed.dto;
 
 import com.project.resiRed.dto.QuestionDto;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SurveyRequestDto {
+public class SurveyDto {
     private String topic;
     private List<QuestionDto> questions;
 }
