@@ -18,7 +18,7 @@ public class Survey {
     @JoinColumn(name="user_id")
     private User user;
 
-    @OneToMany(mappedBy = "survey")
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Question> questions;
 
     @OneToOne(mappedBy = "survey")

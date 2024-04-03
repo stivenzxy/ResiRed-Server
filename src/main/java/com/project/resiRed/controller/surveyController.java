@@ -1,14 +1,14 @@
 package com.project.resiRed.controller;
 
-import com.project.resiRed.controller.AuthResponse;
-
 
 import com.project.resiRed.service.SurveyService;
 import com.project.resiRed.entity.Survey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.project.resiRed.dto.SurveyDto;
+import com.project.resiRed.dto.SurveyDto.SurveyRequestDto;
+import com.project.resiRed.dto.MessageDto;
+
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
@@ -27,7 +27,7 @@ public class surveyController {
     private final SurveyService surveyService;
 
     @PostMapping(value = "create")
-    public  ResponseEntity<ApiResponse> createSurvey(@RequestBody SurveyDto surveyDto){
+    public  ResponseEntity<MessageDto> createSurvey(@RequestBody SurveyRequestDto surveyRequestDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -39,11 +39,11 @@ public class surveyController {
 
         if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
             return ResponseEntity.ok(
-                    surveyService.createSurvey(surveyDto, userDetails.getUsername())
+                    surveyService.createSurvey(surveyRequestDto, userDetails.getUsername())
             );
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    ApiResponse.builder().detail("Insufficient permissions").build()
+                    MessageDto.builder().detail("Insufficient permissions").build()
             );
         }
 

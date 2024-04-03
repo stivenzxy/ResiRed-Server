@@ -1,11 +1,8 @@
 package com.project.resiRed.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.project.resiRed.entity.User;
-import com.project.resiRed.enums.UserRole;
-import com.project.resiRed.dto.SurveyDto;
+import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.SurveyDto.SurveyRequestDto;
 import com.project.resiRed.dto.QuestionDto;
 
 import com.project.resiRed.repository.SurveyRepository;
@@ -17,11 +14,10 @@ import com.project.resiRed.entity.Survey;
 import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Choice;
 
-import com.project.resiRed.controller.ApiResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -31,28 +27,32 @@ public class SurveyService {
     private final ChoiceRepository choiceRepository;
     private final UserRepository userRepository;
 
-    public ApiResponse createSurvey(SurveyDto surveyDto, String email) {
+    public MessageDto createSurvey(SurveyRequestDto surveyRequestDto, String email) {
 
         Survey survey = new Survey();
-        survey.setTopic(surveyDto.getTopic());
+        survey.setTopic(surveyRequestDto.getTopic());
         User user = userRepository.findUserByEmail(email).get();
         survey.setUser(user);
-        surveyRepository.save(survey);
+        survey.setQuestions(new ArrayList<>());
 
-        for (QuestionDto questionDto : surveyDto.getQuestions()) {
+        for (QuestionDto questionDto : surveyRequestDto.getQuestions()) {
             Question question = new Question();
             question.setDescription(questionDto.getDescription());
             question.setSurvey(survey);
-            questionRepository.save(question);
-                for (String choiceStr : questionDto.getChoices()) {
-                    Choice choice = new Choice();
-                    choice.setDescription(choiceStr);
-                    choice.setQuestion(question);
-                    choice.setVotes(0);
-                    choiceRepository.save(choice);
-                }
+            question.setChoices(new ArrayList<>());
+            for (String choiceStr : questionDto.getChoices()) {
+                Choice choice = new Choice();
+                choice.setDescription(choiceStr);
+                choice.setQuestion(question);
+                choice.setVotes(0);
+                question.getChoices().add(choice);
+            }
+            survey.getQuestions().add(question);
         }
-        return ApiResponse.builder().detail("Survey created").build();
+
+        surveyRepository.save(survey);
+
+        return MessageDto.builder().detail("Survey created").build();
     }
 
 }

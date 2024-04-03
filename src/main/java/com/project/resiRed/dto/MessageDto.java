@@ -1,4 +1,4 @@
-package com.project.resiRed.controller;
+package com.project.resiRed.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiResponse {
+public class MessageDto {
     private String detail;
 }
