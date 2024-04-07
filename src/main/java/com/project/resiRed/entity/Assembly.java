@@ -21,7 +21,7 @@ public class Assembly {
     private LocalTime time;
 
     @OneToMany(mappedBy = "assembly")
-    private List<Discussion> discussion;
+    private List<Survey> surveys;
 
     @ManyToMany
     @JoinTable(name = "attendance",
