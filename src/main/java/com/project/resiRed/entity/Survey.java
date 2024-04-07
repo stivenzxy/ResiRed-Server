@@ -1,7 +1,9 @@
 package com.project.resiRed.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
+
 
 import java.util.List;
 
@@ -21,6 +23,8 @@ public class Survey {
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Question> questions;
 
-    @OneToOne(mappedBy = "survey")
-    private Discussion discussion;
+    @ManyToOne
+    @Nullable
+    @JoinColumn(name="assembly_id")
+    private Assembly assembly;
 }
