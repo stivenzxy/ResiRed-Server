@@ -39,7 +39,7 @@ public class surveyController {
 
         if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
             return ResponseEntity.ok(
-                    surveyService.createSurvey(surveyDto, userDetails.getUsername())
+                    surveyService.createSurvey(surveyDto)
             );
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(

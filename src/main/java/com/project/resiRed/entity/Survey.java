@@ -16,10 +16,6 @@ public class Survey {
     private Long surveyId;
     private String topic;
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
-
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Question> questions;
 

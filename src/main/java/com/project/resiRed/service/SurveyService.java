@@ -25,12 +25,10 @@ public class SurveyService {
     private final SurveyRepository surveyRepository;
     private final UserRepository userRepository;
 
-    public MessageDto createSurvey(SurveyDto surveyDto, String email) {
+    public MessageDto createSurvey(SurveyDto surveyDto) {
 
         Survey survey = new Survey();
         survey.setTopic(surveyDto.getTopic());
-        User user = userRepository.findUserByEmail(email).get();
-        survey.setUser(user);
         survey.setQuestions(new ArrayList<>());
 
         for (QuestionDto questionDto : surveyDto.getQuestions()) {
@@ -52,5 +50,7 @@ public class SurveyService {
 
         return MessageDto.builder().detail("Survey created").build();
     }
+
+
 
 }

@@ -43,9 +43,6 @@ public class User implements UserDetails {
     @ManyToMany(mappedBy = "users")
     private List<Assembly> assemblies;
 
-    @OneToMany(mappedBy = "user")
-    private List<Survey> surveys;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority((role.name())));
