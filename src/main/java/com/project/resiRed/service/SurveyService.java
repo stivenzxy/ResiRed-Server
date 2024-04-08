@@ -8,6 +8,7 @@ import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
 import com.project.resiRed.dto.QuestionDto.questionResponse;
 import com.project.resiRed.dto.ChoiceDto.choiceInfoResponse;
+import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 
 
 import com.project.resiRed.repository.SurveyRepository;
@@ -18,6 +19,8 @@ import com.project.resiRed.repository.UserRepository;
 import com.project.resiRed.entity.Survey;
 import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Choice;
+import org.springframework.data.domain.Sort;
+
 
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -113,21 +116,6 @@ public class SurveyService {
             return MessageDto.builder().detail("Survey Deleted").build();
     }
 
-    public MessageDto updateSurveyQuestion(Long questionId, updateQuestionRequest request){
-        Question question = questionRepository.findById(questionId).get();
-        if(Objects.nonNull(request.getDescription()) && !"".equalsIgnoreCase(request.getDescription())){
-        question.setDescription(request.getDescription());
-        }
-        for(choiceInfoResponse choiceDto : request.getChoices()){
-            if(Objects.nonNull(choiceDto.getDescription()) && !"".equalsIgnoreCase(choiceDto.getDescription())){
-                Choice choice = choiceRepository.findById(choiceDto.getChoiceId()).get();
-                choice.setDescription(choiceDto.getDescription());
-            }
-        }
 
-        questionRepository.save(question);
-
-        return MessageDto.builder().detail("Survey updated").build();
-    }
 
 }

@@ -10,7 +10,7 @@ import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
-
+import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -75,7 +75,7 @@ public class surveyController {
 
     }
 
-    @GetMapping(value = "list/unassigned/{id}")
+    @GetMapping(value = "{id}/list/questions")
     public  ResponseEntity<?> getSurveyQuestions(@PathVariable Long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -97,7 +97,7 @@ public class surveyController {
 
     }
 
-    @DeleteMapping(value = "update/unassigned/{id}")
+    @PutMapping(value = "{id}/update/topic")
     public  ResponseEntity<MessageDto> updateSurveyTopic(@PathVariable Long id, @RequestBody  updateTopicRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -119,7 +119,7 @@ public class surveyController {
 
     }
 
-    @DeleteMapping(value = "list/unassigned/{id}")
+    @DeleteMapping(value = "{id}/delete")
     public  ResponseEntity<MessageDto> deleteSurvey(@PathVariable Long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -141,27 +141,6 @@ public class surveyController {
 
     }
 
-    @PutMapping(value = "question/update/{id}")
-    public  ResponseEntity<MessageDto> updateSurveyQuestion(@PathVariable Long id, @RequestBody updateQuestionRequest request){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-
-        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
-            return ResponseEntity.ok(
-                    surveyService.updateSurveyQuestion(id, request)
-            );
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    MessageDto.builder().detail("Insufficient permissions").build());
-        }
-
-    }
 
 
 }
