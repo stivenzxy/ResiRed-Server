@@ -6,6 +6,7 @@ import lombok.Data;
 
 
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -15,6 +16,7 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyId;
     private String topic;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Question> questions;

@@ -3,8 +3,7 @@ package com.project.resiRed.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -17,8 +16,7 @@ public class Assembly {
     private Long assemblyId;
     private String title;
     private String description;
-    private LocalDate date;
-    private LocalTime time;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "assembly")
     private List<Survey> surveys;

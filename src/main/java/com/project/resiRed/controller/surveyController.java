@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.http.HttpStatus;
 
 import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -40,6 +42,29 @@ public class surveyController {
         if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
             return ResponseEntity.ok(
                     surveyService.createSurvey(surveyDto)
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    MessageDto.builder().detail("Insufficient permissions").build());
+        }
+
+    }
+
+
+    @GetMapping(value = "all")
+    public  ResponseEntity<?> getAllSurveys(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
+            return ResponseEntity.ok(
+                    surveyService.getAllSurveys()
             );
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
