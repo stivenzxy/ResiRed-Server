@@ -45,6 +45,28 @@ public class QuestionController {
 
     }
 
+    @DeleteMapping(value = "{id}/delete")
+    public ResponseEntity<MessageDto> deleteQuestion(@PathVariable Long id){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
+            return ResponseEntity.ok(
+                    questionService.deleteQuestion(id)
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    MessageDto.builder().detail("Insufficient permissions").build());
+        }
+
+    }
+
     @PostMapping(value = "{id}/add/choice")
     public  ResponseEntity<MessageDto> addChoiceToQuestion(@PathVariable Long id, @RequestBody createChoiceRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

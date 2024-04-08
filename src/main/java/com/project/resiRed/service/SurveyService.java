@@ -50,9 +50,9 @@ public class SurveyService {
             question.setDescription(questionDto.getDescription());
             question.setSurvey(survey);
             question.setChoices(new ArrayList<>());
-            for (String choiceStr : questionDto.getChoices()) {
+            for (createChoiceRequest choiceDto : questionDto.getChoices()) {
                 Choice choice = new Choice();
-                choice.setDescription(choiceStr);
+                choice.setDescription(choiceDto.getDescription());
                 choice.setQuestion(question);
                 choice.setVotes(0);
                 question.getChoices().add(choice);

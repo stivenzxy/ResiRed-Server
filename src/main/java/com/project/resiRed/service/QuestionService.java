@@ -40,6 +40,11 @@ public class QuestionService {
         return MessageDto.builder().detail("Survey updated").build();
     }
 
+    public MessageDto deleteQuestion(Long questionId){
+        questionRepository.deleteById(questionId);
+        return MessageDto.builder().detail("Question Deleted").build();
+    }
+
     public MessageDto addChoiceToQuestion(Long questionId, createChoiceRequest request){
         Question question = questionRepository.findById(questionId).get();
         Choice choice = new Choice();

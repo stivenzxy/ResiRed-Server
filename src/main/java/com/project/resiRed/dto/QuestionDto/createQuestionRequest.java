@@ -1,4 +1,6 @@
 package com.project.resiRed.dto.QuestionDto;
+
+import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,5 +14,5 @@ import java.util.List;
 @NoArgsConstructor
 public class createQuestionRequest {
     private String description;
-    private List<String> choices;
+    private List<createChoiceRequest> choices;
 }
