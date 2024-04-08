@@ -117,5 +117,23 @@ public class SurveyService {
     }
 
 
+    public MessageDto addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
+        Survey survey = surveyRepository.findById(surveyId).get();
+        Question question = new Question();
+        question.setDescription(request.getDescription());
+        question.setSurvey(survey);
+        question.setChoices(new ArrayList<>());
+        for (createChoiceRequest choiceDto : request.getChoices()) {
+            Choice choice = new Choice();
+            choice.setDescription(choiceDto.getDescription());
+            choice.setQuestion(question);
+            choice.setVotes(0);
+            question.getChoices().add(choice);
+        }
+        survey.getQuestions().add(question);
 
+        surveyRepository.save(survey);
+
+        return MessageDto.builder().detail("Question created").build();
+    }
 }

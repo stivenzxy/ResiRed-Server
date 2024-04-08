@@ -10,6 +10,7 @@ import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
+import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 
 
@@ -141,6 +142,26 @@ public class surveyController {
 
     }
 
+    @PostMapping(value = "{id}/add/question")
+    public  ResponseEntity<MessageDto> addQuestiontoSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
+            return ResponseEntity.ok(
+                    surveyService.addQuestiontoSurvey(id, request)
+            );
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    MessageDto.builder().detail("Insufficient permissions").build());
+        }
+
+    }
 
 }
