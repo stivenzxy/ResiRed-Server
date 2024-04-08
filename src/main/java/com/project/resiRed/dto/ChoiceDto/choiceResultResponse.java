@@ -1,6 +1,4 @@
-package com.project.resiRed.dto.SurveyDto;
-
-import com.project.resiRed.dto.QuestionDto;
+package com.project.resiRed.dto.ChoiceDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class createRequest {
-    private String topic;
-    private List<QuestionDto> questions;
+public class choiceResultResponse {
+    private String description;
+    private int votes;
 }
-

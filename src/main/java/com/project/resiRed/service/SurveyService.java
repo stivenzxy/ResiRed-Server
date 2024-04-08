@@ -1,10 +1,13 @@
 package com.project.resiRed.service;
 
 import com.project.resiRed.dto.MessageDto;
-import com.project.resiRed.dto.QuestionDto;
-import com.project.resiRed.dto.SurveyDto.createRequest;
-import com.project.resiRed.dto.SurveyDto.getAllUnassignedResponse;
-import com.project.resiRed.dto.SurveyDto.getDetailResponse;
+import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
+import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
+import com.project.resiRed.dto.SurveyDto.unassignedSurveysResponse;
+import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
+import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
+import com.project.resiRed.dto.QuestionDto.questionResponse;
+import com.project.resiRed.dto.ChoiceDto.choiceInfoResponse;
 
 
 import com.project.resiRed.repository.SurveyRepository;
@@ -22,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -31,14 +35,14 @@ public class SurveyService {
     private final ChoiceRepository choiceRepository;
     private final UserRepository userRepository;
 
-    public MessageDto createSurvey(createRequest request) {
+    public MessageDto createSurvey(createSurveyRequest request) {
 
         Survey survey = new Survey();
         survey.setCreatedAt(LocalDateTime.now());
         survey.setTopic(request.getTopic());
         survey.setQuestions(new ArrayList<>());
 
-        for (QuestionDto questionDto : request.getQuestions()) {
+        for (createQuestionRequest questionDto : request.getQuestions()) {
             Question question = new Question();
             question.setDescription(questionDto.getDescription());
             question.setSurvey(survey);
@@ -58,11 +62,11 @@ public class SurveyService {
         return MessageDto.builder().detail("Survey created").build();
     }
 
-    public List<getAllUnassignedResponse> getAllUnassignedSurveys() {
+    public List<unassignedSurveysResponse> getAllUnassignedSurveys() {
         List<Survey> allSurveys = surveyRepository.findAllAssemblyIsNull();
-        List<getAllUnassignedResponse> response = new ArrayList<getAllUnassignedResponse>();
+        List<unassignedSurveysResponse> response = new ArrayList<unassignedSurveysResponse>();
         for (Survey survey : allSurveys) {
-            response.add(getAllUnassignedResponse.builder()
+            response.add(unassignedSurveysResponse.builder()
                     .surveyId(survey.getSurveyId())
                     .topic(survey.getTopic())
                     .build());
@@ -72,30 +76,58 @@ public class SurveyService {
 
     }
 
-    public getDetailResponse getSurveyDetail(Long SurveyId) {
-        Survey survey = surveyRepository.findById(SurveyId).get();
+    public List<questionResponse> getSurveyQuestions(Long surveyId) {
+        Survey survey = surveyRepository.findById(surveyId).get();
 
-        List<QuestionDto> questionDtos = new ArrayList<QuestionDto>();
+        List<questionResponse> response = new ArrayList<questionResponse>();
 
         for (Question question : questionRepository.findAllBySurvey(survey)) {
-            List<String> choices = new ArrayList<String>();
+            List<choiceInfoResponse> choices = new ArrayList<choiceInfoResponse>();
             for (Choice choice : choiceRepository.findAllByQuestion(question)) {
-                choices.add(choice.getDescription());
+                choices.add(choiceInfoResponse.builder()
+                        .choiceId(choice.getChoiceId())
+                        .description(choice.getDescription()).build());
             }
-            questionDtos.add(QuestionDto.builder()
+            response.add(questionResponse.builder()
+                    .questionId(question.getQuestionId())
                     .description(question.getDescription()).choices(choices).build()
             );
         }
 
-        return getDetailResponse.builder()
-                .topic(survey.getTopic())
-                .questions(questionDtos)
-                .build();
+        return response;
     }
+
+   public MessageDto updateSurveyTopic(Long surveyId, updateTopicRequest request){
+        Survey survey = surveyRepository.findById(surveyId).get();
+       if(Objects.nonNull(request.getTopic()) && !"".equalsIgnoreCase(request.getTopic())){
+           survey.setTopic(request.getTopic());
+       }
+       surveyRepository.save(survey);
+
+       return MessageDto.builder().detail("Topic Name Updated").build();
+
+   }
 
     public MessageDto deleteSurvey(Long surveyId){
             surveyRepository.deleteById(surveyId);
             return MessageDto.builder().detail("Survey Deleted").build();
+    }
+
+    public MessageDto updateSurveyQuestion(Long questionId, updateQuestionRequest request){
+        Question question = questionRepository.findById(questionId).get();
+        if(Objects.nonNull(request.getDescription()) && !"".equalsIgnoreCase(request.getDescription())){
+        question.setDescription(request.getDescription());
+        }
+        for(choiceInfoResponse choiceDto : request.getChoices()){
+            if(Objects.nonNull(choiceDto.getDescription()) && !"".equalsIgnoreCase(choiceDto.getDescription())){
+                Choice choice = choiceRepository.findById(choiceDto.getChoiceId()).get();
+                choice.setDescription(choiceDto.getDescription());
+            }
+        }
+
+        questionRepository.save(question);
+
+        return MessageDto.builder().detail("Survey updated").build();
     }
 
 }
