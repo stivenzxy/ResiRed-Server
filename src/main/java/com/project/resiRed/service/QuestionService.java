@@ -45,6 +45,11 @@ public class QuestionService {
         return MessageDto.builder().detail("Question Deleted").build();
     }
 
+    public MessageDto deleteChoice(Long choiceId){
+        choiceRepository.deleteById(choiceId);
+        return MessageDto.builder().detail("Choice Deleted").build();
+    }
+
     public MessageDto addChoiceToQuestion(Long questionId, createChoiceRequest request){
         Question question = questionRepository.findById(questionId).get();
         Choice choice = new Choice();
