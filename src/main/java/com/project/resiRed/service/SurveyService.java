@@ -21,6 +21,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.data.domain.Sort;
 
 @Service
@@ -59,9 +62,13 @@ public class SurveyService {
     }
 
     public List<SurveyDto> getAllSurveys(){
-        List<Survey> allSurveys = surveyRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Map<String, Object>> allSurveys = surveyRepository.findAllAssemblyIsNull();
         List<SurveyDto> surveyDtos = new ArrayList<SurveyDto>();
-        for (Survey survey : allSurveys) {
+
+        for (Map<String, Object> surveyquery: allSurveys) {
+            Long surveyId = (Long) surveyquery.get("survey_id");
+            String topic = (String) surveyquery.get("topic");
+            Survey survey = surveyRepository.findById(surveyId).get();
             List<QuestionDto> questionDtos = new ArrayList<QuestionDto>();
             for(Question question : questionRepository.findAllBySurvey(survey)){
                 List<String> choices = new ArrayList<String>();
@@ -73,7 +80,7 @@ public class SurveyService {
                 );
             }
             surveyDtos.add(SurveyDto.builder()
-                    .topic(survey.getTopic())
+                    .topic(topic)
                     .questions(questionDtos).build());
 
         }
