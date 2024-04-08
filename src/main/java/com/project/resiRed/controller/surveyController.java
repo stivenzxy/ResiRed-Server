@@ -2,12 +2,13 @@ package com.project.resiRed.controller;
 
 
 import com.project.resiRed.service.SurveyService;
-import com.project.resiRed.entity.Survey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.project.resiRed.dto.SurveyDto;
 import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
+
+
 
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.http.HttpStatus;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,7 +29,7 @@ public class surveyController {
     private final SurveyService surveyService;
 
     @PostMapping(value = "create")
-    public  ResponseEntity<MessageDto> createSurvey(@RequestBody SurveyDto surveyDto){
+    public  ResponseEntity<MessageDto> createSurvey(@RequestBody createSurveyRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -41,7 +41,7 @@ public class surveyController {
 
         if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
             return ResponseEntity.ok(
-                    surveyService.createSurvey(surveyDto)
+                    surveyService.createSurvey(request)
             );
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
@@ -51,8 +51,8 @@ public class surveyController {
     }
 
 
-    @GetMapping(value = "all")
-    public  ResponseEntity<?> getAllSurveys(){
+    @GetMapping(value = "list/unassigned")
+    public  ResponseEntity<?> getAllUnassignedSurveys(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -64,7 +64,7 @@ public class surveyController {
 
         if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))) {
             return ResponseEntity.ok(
-                    surveyService.getAllSurveys()
+                    surveyService.getAllUnassignedSurveys()
             );
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(

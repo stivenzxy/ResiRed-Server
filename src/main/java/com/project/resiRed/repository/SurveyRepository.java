@@ -14,6 +14,6 @@ import java.util.Optional;
 
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey,Long> {
-    @Query("SELECT s.id as survey_id, s.topic as topic FROM Survey s WHERE s.assembly is NULL ORDER BY s.createdAt DESC")
-    List<Map<String, Object>>findAllAssemblyIsNull();
+    @Query("SELECT s FROM Survey s WHERE s.assembly is NULL ORDER BY s.createdAt DESC")
+    List<Survey>findAllAssemblyIsNull();
 }

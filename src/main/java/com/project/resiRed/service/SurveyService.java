@@ -1,9 +1,9 @@
 package com.project.resiRed.service;
 
-import com.project.resiRed.entity.User;
 import com.project.resiRed.dto.MessageDto;
-import com.project.resiRed.dto.SurveyDto;
 import com.project.resiRed.dto.QuestionDto;
+import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
+import com.project.resiRed.dto.SurveyDto.getAllUnassignedSurveysResponse;
 
 import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.repository.QuestionRepository;
@@ -20,11 +20,6 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Optional;
-
-import org.springframework.data.domain.Sort;
 
 @Service
 @RequiredArgsConstructor
@@ -34,14 +29,14 @@ public class SurveyService {
     private final ChoiceRepository choiceRepository;
     private final UserRepository userRepository;
 
-    public MessageDto createSurvey(SurveyDto surveyDto) {
+    public MessageDto createSurvey(createSurveyRequest request) {
 
         Survey survey = new Survey();
         survey.setCreatedAt(LocalDateTime.now());
-        survey.setTopic(surveyDto.getTopic());
+        survey.setTopic(request.getTopic());
         survey.setQuestions(new ArrayList<>());
 
-        for (QuestionDto questionDto : surveyDto.getQuestions()) {
+        for (QuestionDto questionDto : request.getQuestions()) {
             Question question = new Question();
             question.setDescription(questionDto.getDescription());
             question.setSurvey(survey);
@@ -61,14 +56,21 @@ public class SurveyService {
         return MessageDto.builder().detail("Survey created").build();
     }
 
-    public List<SurveyDto> getAllSurveys(){
-        List<Map<String, Object>> allSurveys = surveyRepository.findAllAssemblyIsNull();
-        List<SurveyDto> surveyDtos = new ArrayList<SurveyDto>();
+    public List<getAllUnassignedSurveysResponse> getAllUnassignedSurveys(){
+        List<Survey> allSurveys = surveyRepository.findAllAssemblyIsNull();
+        List<getAllUnassignedSurveysResponse> response = new ArrayList<getAllUnassignedSurveysResponse>();
+        for (Survey survey: allSurveys) {
+            response.add(getAllUnassignedSurveysResponse.builder()
+                    .surveyId(survey.getSurveyId())
+                    .topic(survey.getTopic())
+                    .build());
+        }
 
-        for (Map<String, Object> surveyquery: allSurveys) {
-            Long surveyId = (Long) surveyquery.get("survey_id");
-            String topic = (String) surveyquery.get("topic");
-            Survey survey = surveyRepository.findById(surveyId).get();
+        return response;
+
+    }
+        /*
+        for (Survey survey: allSurveys) {
             List<QuestionDto> questionDtos = new ArrayList<QuestionDto>();
             for(Question question : questionRepository.findAllBySurvey(survey)){
                 List<String> choices = new ArrayList<String>();
@@ -80,13 +82,11 @@ public class SurveyService {
                 );
             }
             surveyDtos.add(SurveyDto.builder()
-                    .topic(topic)
+                    .topic(survey.getTopic())
                     .questions(questionDtos).build());
 
         }
-
-        return surveyDtos;
-    }
+        */
 
 
 

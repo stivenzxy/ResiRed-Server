@@ -1,7 +1,4 @@
-package com.project.resiRed.dto;
-
-import com.project.resiRed.dto.QuestionDto;
-
+package com.project.resiRed.dto.SurveyDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SurveyDto {
+public class getAllUnassignedSurveysResponse {
+    private Long surveyId;
     private String topic;
-    private List<QuestionDto> questions;
 }
