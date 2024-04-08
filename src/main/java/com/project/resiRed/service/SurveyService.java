@@ -2,8 +2,10 @@ package com.project.resiRed.service;
 
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto;
-import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
-import com.project.resiRed.dto.SurveyDto.getAllUnassignedSurveysResponse;
+import com.project.resiRed.dto.SurveyDto.createRequest;
+import com.project.resiRed.dto.SurveyDto.getAllUnassignedResponse;
+import com.project.resiRed.dto.SurveyDto.getDetailResponse;
+
 
 import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.repository.QuestionRepository;
@@ -29,7 +31,7 @@ public class SurveyService {
     private final ChoiceRepository choiceRepository;
     private final UserRepository userRepository;
 
-    public MessageDto createSurvey(createSurveyRequest request) {
+    public MessageDto createSurvey(createRequest request) {
 
         Survey survey = new Survey();
         survey.setCreatedAt(LocalDateTime.now());
@@ -56,11 +58,11 @@ public class SurveyService {
         return MessageDto.builder().detail("Survey created").build();
     }
 
-    public List<getAllUnassignedSurveysResponse> getAllUnassignedSurveys(){
+    public List<getAllUnassignedResponse> getAllUnassignedSurveys() {
         List<Survey> allSurveys = surveyRepository.findAllAssemblyIsNull();
-        List<getAllUnassignedSurveysResponse> response = new ArrayList<getAllUnassignedSurveysResponse>();
-        for (Survey survey: allSurveys) {
-            response.add(getAllUnassignedSurveysResponse.builder()
+        List<getAllUnassignedResponse> response = new ArrayList<getAllUnassignedResponse>();
+        for (Survey survey : allSurveys) {
+            response.add(getAllUnassignedResponse.builder()
                     .surveyId(survey.getSurveyId())
                     .topic(survey.getTopic())
                     .build());
@@ -69,25 +71,31 @@ public class SurveyService {
         return response;
 
     }
-        /*
-        for (Survey survey: allSurveys) {
-            List<QuestionDto> questionDtos = new ArrayList<QuestionDto>();
-            for(Question question : questionRepository.findAllBySurvey(survey)){
-                List<String> choices = new ArrayList<String>();
-                for(Choice choice : choiceRepository.findAllByQuestion(question)){
-                    choices.add(choice.getDescription());
-                }
-                questionDtos.add(QuestionDto.builder()
-                        .description(question.getDescription()).choices(choices).build()
-                );
+
+    public getDetailResponse getSurveyDetail(Long SurveyId) {
+        Survey survey = surveyRepository.findById(SurveyId).get();
+
+        List<QuestionDto> questionDtos = new ArrayList<QuestionDto>();
+
+        for (Question question : questionRepository.findAllBySurvey(survey)) {
+            List<String> choices = new ArrayList<String>();
+            for (Choice choice : choiceRepository.findAllByQuestion(question)) {
+                choices.add(choice.getDescription());
             }
-            surveyDtos.add(SurveyDto.builder()
-                    .topic(survey.getTopic())
-                    .questions(questionDtos).build());
-
+            questionDtos.add(QuestionDto.builder()
+                    .description(question.getDescription()).choices(choices).build()
+            );
         }
-        */
 
+        return getDetailResponse.builder()
+                .topic(survey.getTopic())
+                .questions(questionDtos)
+                .build();
+    }
 
+    public MessageDto deleteSurvey(Long surveyId){
+            surveyRepository.deleteById(surveyId);
+            return MessageDto.builder().detail("Survey Deleted").build();
+    }
 
 }

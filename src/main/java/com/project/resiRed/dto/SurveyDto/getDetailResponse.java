@@ -1,5 +1,4 @@
 package com.project.resiRed.dto.SurveyDto;
-
 import com.project.resiRed.dto.QuestionDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,8 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class createRequest {
+public class getDetailResponse {
     private String topic;
     private List<QuestionDto> questions;
 }
-
