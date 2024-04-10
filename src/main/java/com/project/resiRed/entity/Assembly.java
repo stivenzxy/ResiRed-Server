@@ -1,9 +1,12 @@
 package com.project.resiRed.entity;
 
+import com.project.resiRed.dto.AssemblyDto;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,15 +19,31 @@ public class Assembly {
     private Long assemblyId;
     private String title;
     private String description;
-    private LocalDateTime createdAt;
+    private LocalDate date;
+    private LocalTime time;
 
-    @OneToMany(mappedBy = "assembly")
-    private List<Survey> surveys;
 
     @ManyToMany
     @JoinTable(name = "attendance",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "assembly_id")
     )
-    private List<User> users;
+    private List<Survey> surveys;
+
+    public AssemblyDto getDto(){
+        AssemblyDto assemblyDto=new AssemblyDto();
+        assemblyDto.setAssemblyId(assemblyId);
+        assemblyDto.setTitle(title);
+        assemblyDto.setDescription(description);
+        assemblyDto.setDate(date);
+        assemblyDto.setTime(time);
+        List<Long> surveyIds=new ArrayList<>();
+        for(Survey survey:surveys){
+            surveyIds.add(survey.getSurveyId());
+        }
+        assemblyDto.setSurveys(surveyIds);
+        return assemblyDto;
+
+    }
+
 }
