@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 public class AssemblyDto {
@@ -12,4 +13,5 @@ public class AssemblyDto {
     private String description;
     private LocalDate date;
     private LocalTime time;
+    private List<Long> surveys;
 }
