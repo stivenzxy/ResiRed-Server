@@ -14,6 +14,6 @@ public class GlobalCorsConfiguration implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos HTTP permitidos
                 .allowedHeaders("*") // Cabeceras permitidas
                 .allowCredentials(true) // Si se permite enviar cookies
-                .maxAge(3600); // Tiempo máximo que los navegadores deben cachear la respuesta de preflight
+                .maxAge(3600*3); // Tiempo máximo que los navegadores deben cachear la respuesta de preflight
     }
 }
