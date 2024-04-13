@@ -1,8 +1,9 @@
 package com.project.resiRed.service.admin;
 
-import com.project.resiRed.dto.AssemblyDto;
+import com.project.resiRed.dto.AssemblyDto.createAssemblyRequest;
+import com.project.resiRed.dto.MessageDto;
 
 
 public interface AssemblyService {
-    AssemblyDto createAssembly(AssemblyDto assemblyDto);
+    MessageDto createAssembly(createAssemblyRequest createAssemblyRequest);
 }

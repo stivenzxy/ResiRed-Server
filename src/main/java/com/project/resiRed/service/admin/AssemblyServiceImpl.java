@@ -1,19 +1,22 @@
 package com.project.resiRed.service.admin;
 
-import com.project.resiRed.dto.AssemblyDto;
+
+import com.project.resiRed.dto.AssemblyDto.createAssemblyRequest;
+import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.entity.Assembly;
 import com.project.resiRed.entity.Survey;
-import com.project.resiRed.entity.User;
 import com.project.resiRed.repository.AssemblyRepository;
 import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.expression.spel.ast.OpAnd;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,23 +25,25 @@ public class AssemblyServiceImpl implements AssemblyService{
     private final UserRepository userRepository;
     private  final SurveyRepository surveyRepository;
     @Override
-    public AssemblyDto createAssembly(AssemblyDto assemblyDto) {
+    public MessageDto createAssembly(createAssemblyRequest createAssemblyRequest) {
 
         Assembly assembly=new Assembly();
-        assembly.setTitle(assemblyDto.getTitle());
-        assembly.setDescription(assemblyDto.getDescription());
-        assembly.setDate(assemblyDto.getDate());
-        assembly.setTime(assemblyDto.getTime());
+
+        assembly.setCreatedAt(LocalDateTime.now());
+        assembly.setTitle(createAssemblyRequest.getTitle());
+        assembly.setDescription(createAssemblyRequest.getDescription());
+        assembly.setDate(LocalDate.now());
+        assembly.setTime(LocalTime.now());
 
 
         List<Survey> surveyList=new ArrayList<>();
-        for(Long surveyId: assemblyDto.getSurveys()){
-            Optional<Survey> survey=surveyRepository.findById(surveyId);
-            surveyList.add(survey.get());
+        for(Long surveyId: createAssemblyRequest.getSurveys()){
+            Survey survey =surveyRepository.findById(surveyId).get();
+            survey.setAssembly(assembly);
+            surveyList.add(survey);
         }
-        assembly.setSurveys(surveyList);
 
-        Assembly createdAssembly=assemblyRepository.save(assembly);
-        return createdAssembly.getDto();
+        assemblyRepository.save(assembly);
+        return MessageDto.builder().detail("Assembly Created").build();
     }
 }

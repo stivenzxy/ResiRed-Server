@@ -1,10 +1,11 @@
 package com.project.resiRed.entity;
 
-import com.project.resiRed.dto.AssemblyDto;
+import com.project.resiRed.dto.AssemblyDto.createAssemblyRequest;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,28 +22,24 @@ public class Assembly {
     private String description;
     private LocalDate date;
     private LocalTime time;
+    private LocalDateTime createdAt;
 
 
-    @ManyToMany
-    @JoinTable(name = "attendance",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "assembly_id")
-    )
+    @OneToMany(mappedBy = "assembly", cascade = CascadeType.ALL)
     private List<Survey> surveys;
 
-    public AssemblyDto getDto(){
-        AssemblyDto assemblyDto=new AssemblyDto();
-        assemblyDto.setAssemblyId(assemblyId);
-        assemblyDto.setTitle(title);
-        assemblyDto.setDescription(description);
-        assemblyDto.setDate(date);
-        assemblyDto.setTime(time);
+    public createAssemblyRequest getDto(){
+        createAssemblyRequest createAssemblyRequest =new createAssemblyRequest();
+        createAssemblyRequest.setTitle(title);
+        createAssemblyRequest.setDescription(description);
+        createAssemblyRequest.setDate(date);
+        createAssemblyRequest.setTime(time);
         List<Long> surveyIds=new ArrayList<>();
         for(Survey survey:surveys){
             surveyIds.add(survey.getSurveyId());
         }
-        assemblyDto.setSurveys(surveyIds);
-        return assemblyDto;
+        createAssemblyRequest.setSurveys(surveyIds);
+        return createAssemblyRequest;
 
     }
 

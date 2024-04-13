@@ -1,17 +1,14 @@
-package com.project.resiRed.controller;
+package com.project.resiRed.controller.admin;
 
 
-import com.project.resiRed.entity.Survey;
-import com.project.resiRed.service.SurveyService;
+import com.project.resiRed.service.admin.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
-import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
-import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 
 
 import org.springframework.security.core.context.SecurityContextHolder;

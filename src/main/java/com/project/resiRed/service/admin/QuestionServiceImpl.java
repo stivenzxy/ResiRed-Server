@@ -1,4 +1,4 @@
-package com.project.resiRed.service;
+package com.project.resiRed.service.admin;
 import com.project.resiRed.dto.ChoiceDto.choiceInfoResponse;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 import com.project.resiRed.dto.MessageDto;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class QuestionService {
+public class QuestionServiceImpl implements QuestionService{
 
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
@@ -40,16 +40,6 @@ public class QuestionService {
         return MessageDto.builder().detail("Survey updated").build();
     }
 
-    public MessageDto deleteQuestion(Long questionId){
-        questionRepository.deleteById(questionId);
-        return MessageDto.builder().detail("Question Deleted").build();
-    }
-
-    public MessageDto deleteChoice(Long choiceId){
-        choiceRepository.deleteById(choiceId);
-        return MessageDto.builder().detail("Choice Deleted").build();
-    }
-
     public MessageDto addChoiceToQuestion(Long questionId, createChoiceRequest request){
         Question question = questionRepository.findById(questionId).get();
         Choice choice = new Choice();
@@ -60,4 +50,16 @@ public class QuestionService {
         questionRepository.save(question);
         return MessageDto.builder().detail("Choice added to question").build();
     }
+
+    public MessageDto deleteQuestion(Long questionId){
+        questionRepository.deleteById(questionId);
+        return MessageDto.builder().detail("Question Deleted").build();
+    }
+
+    public MessageDto deleteChoice(Long choiceId){
+        choiceRepository.deleteById(choiceId);
+        return MessageDto.builder().detail("Choice Deleted").build();
+    }
+
+
 }

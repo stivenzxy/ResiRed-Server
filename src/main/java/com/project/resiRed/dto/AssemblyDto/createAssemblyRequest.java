@@ -1,4 +1,4 @@
-package com.project.resiRed.dto;
+package com.project.resiRed.dto.AssemblyDto;
 
 import lombok.Data;
 
@@ -7,8 +7,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Data
-public class AssemblyDto {
-    private Long assemblyId;
+public class createAssemblyRequest {
     private String title;
     private String description;
     private LocalDate date;

@@ -1,11 +1,10 @@
-package com.project.resiRed.service;
+package com.project.resiRed.service.admin;
 
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
 import com.project.resiRed.dto.SurveyDto.unassignedSurveysResponse;
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
-import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
 import com.project.resiRed.dto.QuestionDto.questionResponse;
 import com.project.resiRed.dto.ChoiceDto.choiceInfoResponse;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
@@ -19,7 +18,6 @@ import com.project.resiRed.repository.UserRepository;
 import com.project.resiRed.entity.Survey;
 import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Choice;
-import org.springframework.data.domain.Sort;
 
 
 import org.springframework.stereotype.Service;
@@ -32,7 +30,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class SurveyService {
+public class SurveyServiceImpl implements SurveyService{
     private final SurveyRepository surveyRepository;
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;

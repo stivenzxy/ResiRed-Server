@@ -1,5 +1,8 @@
 package com.project.resiRed.controller;
 
+import com.project.resiRed.dto.AuthDto.AuthResponse;
+import com.project.resiRed.dto.AuthDto.LoginRequest;
+import com.project.resiRed.dto.AuthDto.RegisterRequest;
 import com.project.resiRed.dto.RefreshTokenDto;
 import com.project.resiRed.entity.User;
 import com.project.resiRed.repository.RefreshTokenRepository;
@@ -11,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 
 @RestController
 @RequestMapping("/auth")

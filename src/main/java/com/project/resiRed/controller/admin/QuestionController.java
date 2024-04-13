@@ -1,10 +1,10 @@
-package com.project.resiRed.controller;
+package com.project.resiRed.controller.admin;
 
 
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
-import com.project.resiRed.service.QuestionService;
+import com.project.resiRed.service.admin.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

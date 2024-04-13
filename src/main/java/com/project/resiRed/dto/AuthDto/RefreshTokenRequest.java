@@ -1,4 +1,4 @@
-package com.project.resiRed.controller.user;
+package com.project.resiRed.dto.AuthDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
-    String message;
+@NoArgsConstructor
+public class RefreshTokenRequest {
+    String refreshToken;
+    String username;
 }
