@@ -3,6 +3,7 @@ package com.project.resiRed.service;
 import com.project.resiRed.controller.AuthResponse;
 import com.project.resiRed.controller.LoginRequest;
 import com.project.resiRed.controller.RegisterRequest;
+import com.project.resiRed.dto.UserDto;
 import com.project.resiRed.entity.User;
 import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.repository.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Service
 @RequiredArgsConstructor
@@ -49,4 +51,5 @@ public class AuthService {
                 .refreshToken(refreshToken)
                 .build();
     }
+
 }

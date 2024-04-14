@@ -37,8 +37,27 @@ public class AssemblyServiceImpl implements AssemblyService{
             surveyList.add(survey.get());
         }
         assembly.setSurveys(surveyList);
-
         Assembly createdAssembly=assemblyRepository.save(assembly);
         return createdAssembly.getDto();
     }
+
+    @Override
+    public AssemblyDto deleteAssemblies(Long assemblyId) {
+        Optional<Assembly> assembly=assemblyRepository.findById(assemblyId);
+        assemblyRepository.deleteById(assemblyId);
+
+        return assembly.get().getDto();
+    }
+
+    @Override
+    public List<AssemblyDto> getAllAssemblies() {
+        List<Assembly> assemblies=assemblyRepository.findAll();
+        List<AssemblyDto> respondAssemblies=new ArrayList<>();
+        for(Assembly assembly:assemblies){
+            respondAssemblies.add(assembly.getDto());
+        }
+        return respondAssemblies;
+    }
+
+
 }

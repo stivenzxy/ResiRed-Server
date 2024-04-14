@@ -1,26 +1,32 @@
 package com.project.resiRed.controller.user;
 
+import com.project.resiRed.controller.RegisterRequest;
 import com.project.resiRed.dto.UserDto;
 import com.project.resiRed.entity.User;
 import com.project.resiRed.repository.UserRepository;
+import com.project.resiRed.service.AuthService;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1/user")
+@RequestMapping(value = "/api/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final UserRepository userRepository;
+    private  final AuthService authService;
 
     @GetMapping(value = "{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Integer id)
@@ -32,6 +38,9 @@ public class UserController {
         }
         return ResponseEntity.ok(userDTO);
     }
+
+
+
 
     /*@PutMapping()
     public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest)

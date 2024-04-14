@@ -1,5 +1,6 @@
 package com.project.resiRed.entity;
 
+import com.project.resiRed.dto.UserDto;
 import com.project.resiRed.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,14 +9,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class User implements UserDetails {
     @Id
@@ -39,7 +42,8 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
-    
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority((role.name())));
@@ -72,5 +76,14 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserDto getDto(){
+        UserDto newUserDto=new UserDto();
+        newUserDto.setFirstname(getFirstName());
+        newUserDto.setLastname(getLastname());
+        newUserDto.setAddress(getAddress());
+        newUserDto.setEmail(getEmail());
+        return newUserDto;
     }
 }
