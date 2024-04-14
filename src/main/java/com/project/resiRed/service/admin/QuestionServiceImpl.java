@@ -1,5 +1,5 @@
 package com.project.resiRed.service.admin;
-import com.project.resiRed.dto.ChoiceDto.choiceInfoResponse;
+import com.project.resiRed.dto.ChoiceDto.choiceResponse;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
@@ -27,7 +27,7 @@ public class QuestionServiceImpl implements QuestionService{
             question.setDescription(request.getDescription());
         }
         if(Objects.nonNull(request.getChoices())) {
-            for (choiceInfoResponse choiceDto : request.getChoices()) {
+            for (choiceResponse choiceDto : request.getChoices()) {
                 if (Objects.nonNull(choiceDto.getDescription()) && !"".equalsIgnoreCase(choiceDto.getDescription())) {
                     Choice choice = choiceRepository.findById(choiceDto.getChoiceId()).get();
                     choice.setDescription(choiceDto.getDescription());

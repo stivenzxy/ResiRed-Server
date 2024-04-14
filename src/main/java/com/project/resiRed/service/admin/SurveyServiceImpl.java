@@ -6,7 +6,7 @@ import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
 import com.project.resiRed.dto.SurveyDto.unassignedSurveysResponse;
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
 import com.project.resiRed.dto.QuestionDto.questionResponse;
-import com.project.resiRed.dto.ChoiceDto.choiceInfoResponse;
+import com.project.resiRed.dto.ChoiceDto.choiceResponse;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 
 
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -69,6 +70,7 @@ public class SurveyServiceImpl implements SurveyService{
         for (Survey survey : allSurveys) {
             response.add(unassignedSurveysResponse.builder()
                     .surveyId(survey.getSurveyId())
+                    .dateCreated(survey.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     .topic(survey.getTopic())
                     .build());
         }
@@ -83,15 +85,16 @@ public class SurveyServiceImpl implements SurveyService{
         List<questionResponse> response = new ArrayList<questionResponse>();
 
         for (Question question : questionRepository.findAllBySurvey(survey)) {
-            List<choiceInfoResponse> choices = new ArrayList<choiceInfoResponse>();
+            List<choiceResponse> choices = new ArrayList<choiceResponse>();
             for (Choice choice : choiceRepository.findAllByQuestion(question)) {
-                choices.add(choiceInfoResponse.builder()
+                choices.add(choiceResponse.builder()
                         .choiceId(choice.getChoiceId())
                         .description(choice.getDescription()).build());
             }
             response.add(questionResponse.builder()
                     .questionId(question.getQuestionId())
-                    .description(question.getDescription()).choices(choices).build()
+                    .description(question.getDescription())
+                    .choices(choices).build()
             );
         }
 

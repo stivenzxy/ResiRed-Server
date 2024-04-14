@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 @RequestMapping("/api/admin/assembly")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class AssemblyController {
     private final AssemblyService assemblyService;
-    @PreAuthorize("hasRole('MAMAGUEBO')")
     @PostMapping("create")
     public ResponseEntity<?> createAssembly(@RequestBody createAssemblyRequest createAssemblyRequest){
         return ResponseEntity.status(HttpStatus.CREATED).body(
