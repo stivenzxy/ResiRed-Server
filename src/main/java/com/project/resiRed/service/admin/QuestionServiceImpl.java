@@ -21,6 +21,8 @@ public class QuestionServiceImpl implements QuestionService{
 
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
+
+    @Override
     public MessageDto updateSurveyQuestion(Long questionId, updateQuestionRequest request){
         Question question = questionRepository.findById(questionId).get();
         if(Objects.nonNull(request.getDescription()) && !"".equalsIgnoreCase(request.getDescription())){
@@ -40,6 +42,7 @@ public class QuestionServiceImpl implements QuestionService{
         return MessageDto.builder().detail("Survey updated").build();
     }
 
+    @Override
     public MessageDto addChoiceToQuestion(Long questionId, createChoiceRequest request){
         Question question = questionRepository.findById(questionId).get();
         Choice choice = new Choice();
@@ -51,11 +54,13 @@ public class QuestionServiceImpl implements QuestionService{
         return MessageDto.builder().detail("Choice added to question").build();
     }
 
+    @Override
     public MessageDto deleteQuestion(Long questionId){
         questionRepository.deleteById(questionId);
         return MessageDto.builder().detail("Question Deleted").build();
     }
 
+    @Override
     public MessageDto deleteChoice(Long choiceId){
         choiceRepository.deleteById(choiceId);
         return MessageDto.builder().detail("Choice Deleted").build();

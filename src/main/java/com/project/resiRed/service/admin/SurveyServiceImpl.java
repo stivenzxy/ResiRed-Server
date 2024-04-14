@@ -37,6 +37,7 @@ public class SurveyServiceImpl implements SurveyService{
     private final ChoiceRepository choiceRepository;
     private final UserRepository userRepository;
 
+    @Override
     public MessageDto createSurvey(createSurveyRequest request) {
 
         Survey survey = new Survey();
@@ -64,6 +65,7 @@ public class SurveyServiceImpl implements SurveyService{
         return MessageDto.builder().detail("Survey created").build();
     }
 
+    @Override
     public List<unassignedSurveysResponse> getAllUnassignedSurveys() {
         List<Survey> allSurveys = surveyRepository.findAllAssemblyIsNull();
         List<unassignedSurveysResponse> response = new ArrayList<unassignedSurveysResponse>();
@@ -79,6 +81,7 @@ public class SurveyServiceImpl implements SurveyService{
 
     }
 
+    @Override
     public List<questionResponse> getSurveyQuestions(Long surveyId) {
         Survey survey = surveyRepository.findById(surveyId).get();
 
@@ -101,6 +104,7 @@ public class SurveyServiceImpl implements SurveyService{
         return response;
     }
 
+    @Override
    public MessageDto updateSurveyTopic(Long surveyId, updateTopicRequest request){
         Survey survey = surveyRepository.findById(surveyId).get();
        if(Objects.nonNull(request.getTopic()) && !"".equalsIgnoreCase(request.getTopic())){
@@ -112,12 +116,13 @@ public class SurveyServiceImpl implements SurveyService{
 
    }
 
+    @Override
     public MessageDto deleteSurvey(Long surveyId){
             surveyRepository.deleteById(surveyId);
             return MessageDto.builder().detail("Survey Deleted").build();
     }
 
-
+    @Override
     public MessageDto addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
         Survey survey = surveyRepository.findById(surveyId).get();
         Question question = new Question();
