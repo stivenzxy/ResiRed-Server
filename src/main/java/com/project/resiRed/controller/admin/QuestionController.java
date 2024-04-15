@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/question")
+@RequestMapping("api/admin/question")
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('ADMIN')")
 public class QuestionController {

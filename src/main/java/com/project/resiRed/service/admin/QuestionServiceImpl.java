@@ -39,7 +39,7 @@ public class QuestionServiceImpl implements QuestionService{
 
         questionRepository.save(question);
 
-        return MessageDto.builder().detail("Survey updated").build();
+        return MessageDto.builder().detail("Question updated").build();
     }
 
     @Override

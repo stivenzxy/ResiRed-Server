@@ -1,18 +1,17 @@
 package com.project.resiRed.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
     int userId;
     String email;
     String firstname;
     String lastname;
     String address;
+
+
 }

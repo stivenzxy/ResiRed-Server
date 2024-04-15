@@ -1,12 +1,14 @@
 package com.project.resiRed.controller.user;
 
+import com.project.resiRed.dto.AuthDto.RegisterRequest;
 import com.project.resiRed.dto.UserDto;
 import com.project.resiRed.entity.User;
-import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,4 +46,5 @@ public class UserService {
         }
         return null;
     }
+
 }

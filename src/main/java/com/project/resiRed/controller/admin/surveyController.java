@@ -27,7 +27,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 
 @RestController
-@RequestMapping("/survey")
+@RequestMapping("api/admin/survey")
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('ADMIN')")
 public class surveyController {

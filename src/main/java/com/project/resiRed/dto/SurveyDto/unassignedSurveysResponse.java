@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class unassignedSurveysResponse {
     private Long surveyId;
-    private String topic;
     private String dateCreated;
+    private String topic;
 }

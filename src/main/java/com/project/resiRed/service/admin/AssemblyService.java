@@ -7,9 +7,16 @@ import com.project.resiRed.dto.MessageDto;
 
 import java.util.List;
 
+import java.util.List;
+
 
 public interface AssemblyService {
     MessageDto createAssembly(createAssemblyRequest request);
 
     List<surveysOverviewResponse> getSurveysOverview(surveysOverviewRequest request);
+
+    MessageDto deleteAssembly(Long assemblyId);
+
+   // List<AssemblyDto> getAllAssemblies();
+
 }

@@ -47,6 +47,7 @@ public class AssemblyServiceImpl implements AssemblyService{
 
         List<Survey> surveyList=new ArrayList<>();
 
+
         for(Long surveyId: request.getSurveys()){
             Survey survey =surveyRepository.findById(surveyId).get();
             survey.setAssembly(assembly);
@@ -77,4 +78,24 @@ public class AssemblyServiceImpl implements AssemblyService{
 
         return response;
     }
+
+    @Override
+    public MessageDto deleteAssembly(Long assemblyId) {
+        Assembly assembly = assemblyRepository.findById(assemblyId).get();
+        assemblyRepository.deleteById(assemblyId);
+        return MessageDto.builder().detail("Assembly deleted").build();
+    }
+
+    /*
+    @Override
+    public List<AssemblyDto> getAllAssemblies() {
+        List<Assembly> assemblies=assemblyRepository.findAll();
+        List<AssemblyDto> respondAssemblies=new ArrayList<>();
+        for(Assembly assembly:assemblies){
+            respondAssemblies.add(assembly.getDto());
+        }
+        return respondAssemblies;
+    }
+    */
+
 }
