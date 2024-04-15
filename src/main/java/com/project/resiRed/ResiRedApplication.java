@@ -8,11 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableMethodSecurity
 @SpringBootApplication
 public class ResiRedApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ResiRedApplication.class, args);
 	}
-
-
-
 }

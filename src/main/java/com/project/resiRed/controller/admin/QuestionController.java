@@ -2,7 +2,9 @@ package com.project.resiRed.controller.admin;
 
 
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
+import com.project.resiRed.dto.ChoiceDto.newChoiceResponse;
 import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
 import com.project.resiRed.service.admin.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -40,12 +42,10 @@ public class QuestionController {
             return ResponseEntity.ok(
                     questionService.deleteChoice(id)
             );
-
-
     }
 
     @PostMapping(value = "{id}/add/choice")
-    public  ResponseEntity<MessageDto> addChoiceToQuestion(@PathVariable Long id, @RequestBody createChoiceRequest request){
+    public  ResponseEntity<newChoiceResponse> addChoiceToQuestion(@PathVariable Long id, @RequestBody createChoiceRequest request){
             return ResponseEntity.ok(questionService.addChoiceToQuestion(id, request));
     }
 }

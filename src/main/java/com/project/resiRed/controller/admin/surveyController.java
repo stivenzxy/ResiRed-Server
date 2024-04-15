@@ -1,6 +1,7 @@
 package com.project.resiRed.controller.admin;
 
 
+import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
 import com.project.resiRed.service.admin.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +61,7 @@ public class surveyController {
     }
 
     @PostMapping(value = "{id}/add/question")
-    public  ResponseEntity<MessageDto> addQuestiontoSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request){
+    public  ResponseEntity<newQuestionResponse> addQuestiontoSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request){
             return ResponseEntity.ok(surveyService.addQuestiontoSurvey(id, request));
 
     }

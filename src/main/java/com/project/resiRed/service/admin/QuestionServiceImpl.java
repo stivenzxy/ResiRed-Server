@@ -1,6 +1,7 @@
 package com.project.resiRed.service.admin;
 import com.project.resiRed.dto.ChoiceDto.choiceResponse;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
+import com.project.resiRed.dto.ChoiceDto.newChoiceResponse;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
 import com.project.resiRed.entity.Choice;
@@ -12,6 +13,8 @@ import com.project.resiRed.repository.ChoiceRepository;
 
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 
@@ -43,15 +46,19 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public MessageDto addChoiceToQuestion(Long questionId, createChoiceRequest request){
-        Question question = questionRepository.findById(questionId).get();
+    public newChoiceResponse addChoiceToQuestion(Long questionId, createChoiceRequest request){
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new NoSuchElementException("Question not found"));
         Choice choice = new Choice();
         choice.setDescription(request.getDescription());
-        choice.setQuestion(question);
         choice.setVotes(0);
+
+        choiceRepository.saveAndFlush(choice); // Guardar y flushear antes de añadir a la colección
+
+        choice.setQuestion(question);
         question.getChoices().add(choice);
-        questionRepository.save(question);
-        return MessageDto.builder().detail("Choice added to question").build();
+        questionRepository.save(question); // Guardar la pregunta actualizada (preventivo)
+
+        return new newChoiceResponse(choice.getChoiceId(), "Choice added to question");
     }
 
     @Override
@@ -65,6 +72,4 @@ public class QuestionServiceImpl implements QuestionService{
         choiceRepository.deleteById(choiceId);
         return MessageDto.builder().detail("Choice Deleted").build();
     }
-
-
 }

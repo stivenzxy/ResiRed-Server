@@ -44,6 +44,7 @@ public class JwtService {
                 .claim("username", user.getFirstName())
                 .claim("lastname", user.getLastname())
                 .claim("address", user.getAddress())
+                .claim("role", user.getRole())
                 .claim("type", "ACCESS_TOKEN")
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))

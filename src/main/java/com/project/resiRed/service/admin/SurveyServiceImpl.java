@@ -1,6 +1,7 @@
 package com.project.resiRed.service.admin;
 
 import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
 import com.project.resiRed.dto.SurveyDto.unassignedSurveysResponse;
@@ -123,7 +124,7 @@ public class SurveyServiceImpl implements SurveyService{
     }
 
     @Override
-    public MessageDto addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
+    public newQuestionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
         Survey survey = surveyRepository.findById(surveyId).get();
         Question question = new Question();
         question.setDescription(request.getDescription());
@@ -138,8 +139,9 @@ public class SurveyServiceImpl implements SurveyService{
         }
         survey.getQuestions().add(question);
 
+        questionRepository.saveAndFlush(question);
         surveyRepository.save(survey);
 
-        return MessageDto.builder().detail("Question created").build();
+        return new newQuestionResponse(question.getQuestionId(), "Question added to Survey");
     }
 }
