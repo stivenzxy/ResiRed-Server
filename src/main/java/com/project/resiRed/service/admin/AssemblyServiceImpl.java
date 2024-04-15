@@ -44,14 +44,9 @@ public class AssemblyServiceImpl implements AssemblyService{
         assembly.setDate(LocalDate.now());
         assembly.setTime(LocalTime.now());
 
-
-        List<Survey> surveyList=new ArrayList<>();
-
-
         for(Long surveyId: request.getSurveys()){
             Survey survey =surveyRepository.findById(surveyId).get();
             survey.setAssembly(assembly);
-            surveyList.add(survey);
         }
 
         assemblyRepository.save(assembly);
