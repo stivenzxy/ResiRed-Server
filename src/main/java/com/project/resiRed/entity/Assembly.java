@@ -23,7 +23,8 @@ public class Assembly {
     private String title;
     private String description;
     private LocalDate date;
-    private LocalTime time;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "assembly", cascade = CascadeType.ALL)
@@ -41,7 +42,6 @@ public class Assembly {
         createAssemblyRequest.setTitle(title);
         createAssemblyRequest.setDescription(description);
         createAssemblyRequest.setDate(date);
-        createAssemblyRequest.setTime(time);
         List<Long> surveyIds=new ArrayList<>();
         for(Survey survey:surveys){
             surveyIds.add(survey.getSurveyId());

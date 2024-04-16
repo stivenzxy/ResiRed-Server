@@ -41,8 +41,9 @@ public class AssemblyServiceImpl implements AssemblyService{
         assembly.setCreatedAt(LocalDateTime.now());
         assembly.setTitle(request.getTitle());
         assembly.setDescription(request.getDescription());
-        assembly.setDate(LocalDate.now());
-        assembly.setTime(LocalTime.now());
+        assembly.setDate(request.getDate());
+        assembly.setStartTime(request.getStartTime());
+        assembly.setEndTime(request.getEndTime());
 
         for(Long surveyId: request.getSurveys()){
             Survey survey =surveyRepository.findById(surveyId).get();
