@@ -48,7 +48,7 @@ public class JwtService {
                 .claim("type", "ACCESS_TOKEN")
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10)) // el token de acceso cambia cada 10 mins
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // el token de acceso cambia cada 10 mins
                 .signWith(getKey())
                 .compact();
     }
@@ -71,7 +71,7 @@ public class JwtService {
             RefreshToken newToken = new RefreshToken();
             newToken.setToken(refreshToken);
             newToken.setUser(user);
-            newToken.setExpirationDate(new Date(System.currentTimeMillis() + 1000 * 60 * 5));
+            newToken.setExpirationDate(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 3));
             refreshTokenRepository.save(newToken);
         }
 
