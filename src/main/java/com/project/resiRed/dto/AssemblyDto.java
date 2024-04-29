@@ -6,16 +6,17 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class AssemblyDto {
-    Long assemblyId;
-    String title;
-    String description;
-    LocalDate date;
-    LocalTime time;
-    List<Long> surveys;
-    List<User> attendees;
+    private Long assemblyId;
+    private String title;
+    private String description;
+    private LocalDate date;
+    private LocalTime time;
+    private List<Long> surveys;
+    private List<User> attendees = new ArrayList<>();
 
 }

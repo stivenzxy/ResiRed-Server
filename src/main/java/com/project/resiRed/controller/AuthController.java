@@ -3,6 +3,7 @@ package com.project.resiRed.controller;
 import com.project.resiRed.dto.AuthDto.AuthResponse;
 import com.project.resiRed.dto.AuthDto.LoginRequest;
 import com.project.resiRed.dto.AuthDto.RegisterRequest;
+import com.project.resiRed.dto.AuthDto.RegisterResponse;
 import com.project.resiRed.dto.RefreshTokenDto;
 import com.project.resiRed.dto.UserDto;
 import com.project.resiRed.entity.User;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
@@ -25,6 +27,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/auth")
@@ -74,14 +77,26 @@ public class AuthController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("registerUsers")
-    ResponseEntity<List<RegisterRequest>> registerUsers(@RequestParam("file") MultipartFile file){
+    ResponseEntity<?> registerUsers(@RequestParam("file") MultipartFile file){
+        if (!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".csv")) {
+            RegisterResponse errorResponse = new RegisterResponse("El archivo debe ser un archivo CSV.");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+        //System.out.println("Entro");
         List<RegisterRequest> usersToSave=new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
-             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withDelimiter(';'))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream())); CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withDelimiter(';'))) {
+            CSVRecord header = csvParser.iterator().next();
+            int expectedColumnCount = 5; // Número esperado de columnas
+
+            if (header.size() != expectedColumnCount) {
+                RegisterResponse errorResponse = new RegisterResponse("El archivo debe contener exactamente " + expectedColumnCount + " columnas.");
+                return ResponseEntity.badRequest().body(errorResponse);
+            }
+
             int line=0;
             for (CSVRecord csvRecord : csvParser) {
                 if(line!=0) {
-                    System.out.println("ENTRO");
+                    //System.out.println("ENTRO V2");
                     RegisterRequest request = new RegisterRequest();
                     request.setName(csvRecord.get(0));
                     System.out.println(request.getName());
@@ -100,9 +115,5 @@ public class AuthController {
         }
         return ResponseEntity.ok(usersToSave);
 
-
     }
-
-
-
 }
