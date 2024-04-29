@@ -1,6 +1,5 @@
 package com.project.resiRed.controller.user;
 
-import com.project.resiRed.controller.RegisterRequest;
 import com.project.resiRed.dto.AssemblyDto;
 import com.project.resiRed.dto.UserDto;
 import com.project.resiRed.entity.Assembly;
