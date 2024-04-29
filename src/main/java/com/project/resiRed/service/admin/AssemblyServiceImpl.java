@@ -59,5 +59,24 @@ public class AssemblyServiceImpl implements AssemblyService{
         return respondAssemblies;
     }
 
+    @Override
+    public AssemblyDto getAssemblyById(Long id) {
+        Optional<Assembly> assembly=assemblyRepository.findById(id);
+        return assembly.get().getDto();
+    }
+
+    @Override
+    public AssemblyDto updateAttendies(AssemblyDto assemblyDto) {
+        Optional<Assembly> assembly=assemblyRepository.findById(assemblyDto.getAssemblyId());
+        Assembly assembly1=assembly.get();
+        if(assembly!=null){
+            assembly1.setAttendees(assemblyDto.getAttendees());
+            Assembly updatedAssembly=assemblyRepository.save(assembly1);
+            return  updatedAssembly.getDto();
+        }
+        return null;
+
+    }
+
 
 }

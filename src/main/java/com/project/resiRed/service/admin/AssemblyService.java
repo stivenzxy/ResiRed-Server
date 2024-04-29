@@ -9,4 +9,6 @@ public interface AssemblyService {
     AssemblyDto createAssembly(AssemblyDto assemblyDto);
     AssemblyDto deleteAssemblies(Long assemblyId);
     List<AssemblyDto> getAllAssemblies();
+    AssemblyDto getAssemblyById(Long id);
+    AssemblyDto updateAttendies(AssemblyDto assemblyDto);
 }

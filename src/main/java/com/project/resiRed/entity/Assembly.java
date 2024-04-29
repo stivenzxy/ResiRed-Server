@@ -1,6 +1,7 @@
 package com.project.resiRed.entity;
 
 import com.project.resiRed.dto.AssemblyDto;
+import com.project.resiRed.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,8 +24,12 @@ public class Assembly {
     private String description;
     private LocalDate date;
     private LocalTime time;
-    @ManyToMany(mappedBy = "assemblies")
-    private Set<Attendance> attendances = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "attendance",
+            joinColumns = @JoinColumn(name = "assembly_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> attendees = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "assembly", cascade = CascadeType.ALL)

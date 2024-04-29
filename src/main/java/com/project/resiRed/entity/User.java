@@ -8,10 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -43,6 +40,16 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @ManyToMany(mappedBy = "attendees")
+    private List<Assembly> assemblies = new ArrayList<>();
+
+    public User(int userId, String firstname, String lastname, String email, String address) {
+        this.userId= (long)userId;
+        this.name=firstname;
+        this.lastname=lastname;
+        this.email=email;
+        this.address=address;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
