@@ -12,6 +12,5 @@ public class createAssemblyRequest {
     private String description;
     private LocalDate date;
     private LocalTime startTime;
-    private LocalTime endTime;
     private List<Long> surveys;
 }

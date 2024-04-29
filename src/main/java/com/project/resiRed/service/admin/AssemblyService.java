@@ -1,5 +1,6 @@
 package com.project.resiRed.service.admin;
 
+import com.project.resiRed.dto.AssemblyDto.AssemblyResponse;
 import com.project.resiRed.dto.AssemblyDto.createAssemblyRequest;
 import com.project.resiRed.dto.AssemblyDto.surveysOverviewRequest;
 import com.project.resiRed.dto.AssemblyDto.surveysOverviewResponse;
@@ -17,6 +18,6 @@ public interface AssemblyService {
 
     MessageDto deleteAssembly(Long assemblyId);
 
-   // List<AssemblyDto> getAllAssemblies();
+   List<AssemblyResponse> getAllAssemblies();
 
 }

@@ -1,10 +1,7 @@
 package com.project.resiRed.service.admin;
 
 
-import com.project.resiRed.dto.AssemblyDto.createAssemblyRequest;
-import com.project.resiRed.dto.AssemblyDto.surveysOverviewRequest;
-import com.project.resiRed.dto.AssemblyDto.surveysOverviewResponse;
-import com.project.resiRed.dto.AssemblyDto.questionOverviewResponse;
+import com.project.resiRed.dto.AssemblyDto.*;
 
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.entity.Assembly;
@@ -43,7 +40,6 @@ public class AssemblyServiceImpl implements AssemblyService{
         assembly.setDescription(request.getDescription());
         assembly.setDate(request.getDate());
         assembly.setStartTime(request.getStartTime());
-        assembly.setEndTime(request.getEndTime());
 
         for(Long surveyId: request.getSurveys()){
             Survey survey =surveyRepository.findById(surveyId).get();
@@ -82,16 +78,14 @@ public class AssemblyServiceImpl implements AssemblyService{
         return MessageDto.builder().detail("Assembly deleted").build();
     }
 
-    /*
+
     @Override
-    public List<AssemblyDto> getAllAssemblies() {
-        List<Assembly> assemblies=assemblyRepository.findAll();
-        List<AssemblyDto> respondAssemblies=new ArrayList<>();
-        for(Assembly assembly:assemblies){
+    public List<AssemblyResponse> getAllAssemblies() {
+        List<Assembly> assemblies = assemblyRepository.findAll();
+        List<AssemblyResponse> respondAssemblies = new ArrayList<>();
+        for (Assembly assembly : assemblies) {
             respondAssemblies.add(assembly.getDto());
         }
         return respondAssemblies;
     }
-    */
-
 }

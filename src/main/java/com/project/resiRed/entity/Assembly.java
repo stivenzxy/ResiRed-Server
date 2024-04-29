@@ -1,5 +1,7 @@
 package com.project.resiRed.entity;
 
+import com.project.resiRed.dto.AssemblyDto.AssemblyResponse;
+import com.project.resiRed.dto.AssemblyDto.SurveyOverview;
 import com.project.resiRed.dto.AssemblyDto.createAssemblyRequest;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -24,7 +26,6 @@ public class Assembly {
     private String description;
     private LocalDate date;
     private LocalTime startTime;
-    private LocalTime endTime;
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "assembly", cascade = CascadeType.ALL)
@@ -37,18 +38,23 @@ public class Assembly {
     )
     private List<User> users;
 
-    public createAssemblyRequest getDto(){
-        createAssemblyRequest createAssemblyRequest =new createAssemblyRequest();
-        createAssemblyRequest.setTitle(title);
-        createAssemblyRequest.setDescription(description);
-        createAssemblyRequest.setDate(date);
-        List<Long> surveyIds=new ArrayList<>();
-        for(Survey survey:surveys){
-            surveyIds.add(survey.getSurveyId());
+    public AssemblyResponse getDto() {
+        AssemblyResponse assemblyResponse = new AssemblyResponse();
+        assemblyResponse.setId(assemblyId);
+        assemblyResponse.setTitle(title);
+        assemblyResponse.setDescription(description);
+        assemblyResponse.setDate(date);
+        assemblyResponse.setStartTime(startTime);
+
+        // Creando la lista de SurveyOverview a partir de las encuestas
+        List<SurveyOverview> surveyOverviews = new ArrayList<>();
+        for (Survey survey : surveys) {
+            SurveyOverview overview = new SurveyOverview();
+            overview.setId(survey.getSurveyId());
+            overview.setTopic(survey.getTopic()); // Asumiendo que Survey tiene un método getTopic()
+            surveyOverviews.add(overview);
         }
-        createAssemblyRequest.setSurveys(surveyIds);
-        return createAssemblyRequest;
-
+        assemblyResponse.setSurveys(surveyOverviews);
+        return assemblyResponse;
     }
-
 }

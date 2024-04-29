@@ -1,5 +1,6 @@
 package com.project.resiRed.controller.admin;
 
+import com.project.resiRed.dto.AssemblyDto.AssemblyResponse;
 import org.springframework.http.ResponseEntity;
 import com.project.resiRed.dto.AssemblyDto.createAssemblyRequest;
 import com.project.resiRed.dto.AssemblyDto.surveysOverviewRequest;
@@ -36,9 +37,8 @@ public class AssemblyController {
         return ResponseEntity.ok(assemblyService.deleteAssembly(assemblyId));
     }
 
-   /* @GetMapping("list")
-    public ResponseEntity<List<?>> getAllAssemblies(){
-        List<AssemblyDto> allAssemblies=assemblyService.getAllAssemblies();
-        return ResponseEntity.ok(allAssemblies);
-    }*/
+    @GetMapping("history")
+    public ResponseEntity<List<AssemblyResponse>> getAllAssemblies() {
+        return ResponseEntity.ok(assemblyService.getAllAssemblies());
+    }
 }

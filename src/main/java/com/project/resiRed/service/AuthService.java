@@ -39,7 +39,7 @@ public class AuthService {
                 .address(request.getAddress())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
-                .role(UserRole.ADMIN)
+                .role(UserRole.OWNER)
                 .build();
 
         userRepository.save(user);
