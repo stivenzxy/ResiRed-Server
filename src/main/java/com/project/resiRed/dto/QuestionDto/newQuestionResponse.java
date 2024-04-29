@@ -1,16 +1,15 @@
-package com.project.resiRed.dto.ChoiceDto;
+package com.project.resiRed.dto.QuestionDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class choiceInfoResponse {
-    private Long choiceId;
-    private String description;
+public class newQuestionResponse {
+    private Long questionId;
+    private String detail;
 }

@@ -1,5 +1,8 @@
 package com.project.resiRed.controller;
 
+import com.project.resiRed.dto.AuthDto.AuthResponse;
+import com.project.resiRed.dto.AuthDto.LoginRequest;
+import com.project.resiRed.dto.AuthDto.RegisterRequest;
 import com.project.resiRed.dto.RefreshTokenDto;
 import com.project.resiRed.dto.UserDto;
 import com.project.resiRed.entity.User;
@@ -13,10 +16,10 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -69,6 +72,7 @@ public class AuthController {
         return ResponseEntity.ok().build(); // Responde con el estado OK después de la eliminación
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("registerUsers")
     ResponseEntity<List<RegisterRequest>> registerUsers(@RequestParam("file") MultipartFile file){
         List<RegisterRequest> usersToSave=new ArrayList<>();

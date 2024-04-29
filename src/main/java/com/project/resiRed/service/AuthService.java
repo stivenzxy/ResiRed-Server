@@ -1,9 +1,8 @@
 package com.project.resiRed.service;
 
-import com.project.resiRed.controller.AuthResponse;
-import com.project.resiRed.controller.LoginRequest;
-import com.project.resiRed.controller.RegisterRequest;
-import com.project.resiRed.dto.UserDto;
+import com.project.resiRed.dto.AuthDto.AuthResponse;
+import com.project.resiRed.dto.AuthDto.LoginRequest;
+import com.project.resiRed.dto.AuthDto.RegisterRequest;
 import com.project.resiRed.entity.User;
 import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.repository.UserRepository;

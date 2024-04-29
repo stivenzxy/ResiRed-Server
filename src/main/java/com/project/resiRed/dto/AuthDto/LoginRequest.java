@@ -1,4 +1,4 @@
-package com.project.resiRed.controller;
+package com.project.resiRed.dto.AuthDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

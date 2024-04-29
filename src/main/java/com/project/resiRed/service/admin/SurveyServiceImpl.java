@@ -1,13 +1,13 @@
-package com.project.resiRed.service;
+package com.project.resiRed.service.admin;
 
 import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
 import com.project.resiRed.dto.SurveyDto.unassignedSurveysResponse;
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
-import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
 import com.project.resiRed.dto.QuestionDto.questionResponse;
-import com.project.resiRed.dto.ChoiceDto.choiceInfoResponse;
+import com.project.resiRed.dto.ChoiceDto.choiceResponse;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 
 
@@ -19,25 +19,26 @@ import com.project.resiRed.repository.UserRepository;
 import com.project.resiRed.entity.Survey;
 import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Choice;
-import org.springframework.data.domain.Sort;
 
 
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class SurveyService {
+public class SurveyServiceImpl implements SurveyService{
     private final SurveyRepository surveyRepository;
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
     private final UserRepository userRepository;
 
+    @Override
     public MessageDto createSurvey(createSurveyRequest request) {
 
         Survey survey = new Survey();
@@ -65,12 +66,14 @@ public class SurveyService {
         return MessageDto.builder().detail("Survey created").build();
     }
 
+    @Override
     public List<unassignedSurveysResponse> getAllUnassignedSurveys() {
         List<Survey> allSurveys = surveyRepository.findAllAssemblyIsNull();
         List<unassignedSurveysResponse> response = new ArrayList<unassignedSurveysResponse>();
         for (Survey survey : allSurveys) {
             response.add(unassignedSurveysResponse.builder()
                     .surveyId(survey.getSurveyId())
+                    .dateCreated(survey.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     .topic(survey.getTopic())
                     .build());
         }
@@ -79,27 +82,30 @@ public class SurveyService {
 
     }
 
+    @Override
     public List<questionResponse> getSurveyQuestions(Long surveyId) {
         Survey survey = surveyRepository.findById(surveyId).get();
 
         List<questionResponse> response = new ArrayList<questionResponse>();
 
         for (Question question : questionRepository.findAllBySurvey(survey)) {
-            List<choiceInfoResponse> choices = new ArrayList<choiceInfoResponse>();
+            List<choiceResponse> choices = new ArrayList<choiceResponse>();
             for (Choice choice : choiceRepository.findAllByQuestion(question)) {
-                choices.add(choiceInfoResponse.builder()
+                choices.add(choiceResponse.builder()
                         .choiceId(choice.getChoiceId())
                         .description(choice.getDescription()).build());
             }
             response.add(questionResponse.builder()
                     .questionId(question.getQuestionId())
-                    .description(question.getDescription()).choices(choices).build()
+                    .description(question.getDescription())
+                    .choices(choices).build()
             );
         }
 
         return response;
     }
 
+    @Override
    public MessageDto updateSurveyTopic(Long surveyId, updateTopicRequest request){
         Survey survey = surveyRepository.findById(surveyId).get();
        if(Objects.nonNull(request.getTopic()) && !"".equalsIgnoreCase(request.getTopic())){
@@ -111,13 +117,14 @@ public class SurveyService {
 
    }
 
+    @Override
     public MessageDto deleteSurvey(Long surveyId){
             surveyRepository.deleteById(surveyId);
             return MessageDto.builder().detail("Survey Deleted").build();
     }
 
-
-    public MessageDto addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
+    @Override
+    public newQuestionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
         Survey survey = surveyRepository.findById(surveyId).get();
         Question question = new Question();
         question.setDescription(request.getDescription());
@@ -132,8 +139,9 @@ public class SurveyService {
         }
         survey.getQuestions().add(question);
 
+        questionRepository.saveAndFlush(question);
         surveyRepository.save(survey);
 
-        return MessageDto.builder().detail("Question created").build();
+        return new newQuestionResponse(question.getQuestionId(), "Question added to Survey");
     }
 }

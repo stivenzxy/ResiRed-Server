@@ -1,4 +1,4 @@
-package com.project.resiRed.controller;
+package com.project.resiRed.dto.ChoiceDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RefreshTokenRequest {
-    String refreshToken;
-    String username;
+public class newChoiceResponse {
+    private Long choiceId;
+    private String detail;
 }
