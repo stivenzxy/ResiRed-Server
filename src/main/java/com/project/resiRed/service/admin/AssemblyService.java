@@ -15,9 +15,8 @@ public interface AssemblyService {
 
     MessageDto deleteAssembly(Long assemblyId);
 
-   List<AssemblyResponse> getAllAssemblies();
+    List<AssemblyResponse> getAllAssemblies();
 
-   AssemblyAvailabilityResponse checkAvailability(Long assemblyId, Long userId);
-
+    //AssemblyAvailabilityResponse checkAvailability();
 
 }

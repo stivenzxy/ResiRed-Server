@@ -47,6 +47,7 @@ public class Assembly {
         assemblyResponse.setDescription(description);
         assemblyResponse.setDate(date);
         assemblyResponse.setStartTime(startTime);
+        assemblyResponse.setStatus(status);
 
         // Creando la lista de SurveyOverview a partir de las encuestas
         List<SurveyOverview> surveyOverviews = new ArrayList<>();

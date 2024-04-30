@@ -1,10 +1,7 @@
 package com.project.resiRed.controller.admin;
 
-import com.project.resiRed.dto.AssemblyDto.AssemblyAvailabilityResponse;
-import com.project.resiRed.dto.AssemblyDto.AssemblyResponse;
+import com.project.resiRed.dto.AssemblyDto.*;
 import org.springframework.http.ResponseEntity;
-import com.project.resiRed.dto.AssemblyDto.createAssemblyRequest;
-import com.project.resiRed.dto.AssemblyDto.surveysOverviewRequest;
 import com.project.resiRed.service.admin.AssemblyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,9 +41,17 @@ public class AssemblyController {
         return ResponseEntity.ok(assemblyService.getAllAssemblies());
     }
 
+
+    /*
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('OWNER')")
-    @GetMapping("check/{assemblyId}/{userId}")
-    public ResponseEntity<AssemblyAvailabilityResponse> checkAvailability(@PathVariable Long assemblyId, @PathVariable Long userId){
-        return ResponseEntity.ok(assemblyService.checkAvailability(assemblyId, userId));
+    @GetMapping("check/")
+    public ResponseEntity<AssemblyAvailabilityResponse> checkAvailability(@PathVariable Long assemblyId){
+        return ResponseEntity.ok(assemblyService.checkAvailability());
     }
+*/
+
+
+
+
+
 }

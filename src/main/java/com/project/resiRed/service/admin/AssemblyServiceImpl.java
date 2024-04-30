@@ -17,6 +17,8 @@ import com.project.resiRed.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.ls.LSException;
+
+import javax.swing.*;
 import java.util.ArrayList;
 
 import java.time.LocalDate;
@@ -25,6 +27,7 @@ import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -92,48 +95,32 @@ public class AssemblyServiceImpl implements AssemblyService{
         }
         return respondAssemblies;
     }
-
+/*
     @Override
-    public AssemblyAvailabilityResponse checkAvailability(Long assemblyId, Long userId) {
-        Assembly assembly = assemblyRepository.findById(assemblyId).get();
-        User user = userRepository.findById(userId).get();
+    public AssemblyAvailabilityResponse checkAvailability() {
+        Optional<Assembly> assembly= assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED);
 
-        if (user.getRole() == UserRole.ADMIN) {
-            LocalDate date = assembly.getDate();
-            LocalTime time = assembly.getStartTime();
+        LocalDate date = assembly.getDate();
+        LocalTime time = assembly.getStartTime();
 
-            LocalDateTime dateTime = LocalDateTime.of(date.getYear(),
-                    date.getMonthValue(), date.getDayOfMonth(),
-                    time.getHour(), time.getMinute(), time.getSecond());
+        LocalDateTime dateTime = LocalDateTime.of(date.getYear(),
+                date.getMonthValue(), date.getDayOfMonth(),
+                time.getHour(), time.getMinute(), time.getSecond());
 
-            System.out.println("ESTA MIERDA " + dateTime + " ESTA OTRA MIERDA " + LocalDateTime.now());
-
-            if (LocalDateTime.now().isBefore(dateTime)) {
-                assembly.setStatus(AssemblyStatus.OPENED);
-                return AssemblyAvailabilityResponse.builder()
-                        .flag(false)
-                        .date(assembly.getDate())
-                        .startTime(assembly.getStartTime())
-                        .build();
-            } else {
-                return AssemblyAvailabilityResponse.builder()
-                        .flag(true)
-                        .build();
-            }
+        if (LocalDateTime.now().isBefore(dateTime)) {
+            return AssemblyAvailabilityResponse.builder()
+                    .flag(false)
+                    .date(assembly.getDate())
+                    .startTime(assembly.getStartTime())
+                    .build();
         } else {
-            if (assembly.getStatus() != AssemblyStatus.OPENED) {
-                return AssemblyAvailabilityResponse.builder()
-                        .flag(false)
-                        .date(assembly.getDate())
-                        .startTime(assembly.getStartTime())
-                        .build();
-            } else{
             return AssemblyAvailabilityResponse.builder()
                     .flag(true)
                     .build();
-            }
         }
+    }
 
-        }
+ */
+
 
 }
