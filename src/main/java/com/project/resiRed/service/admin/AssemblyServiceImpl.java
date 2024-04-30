@@ -7,6 +7,9 @@ import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.entity.Assembly;
 import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Survey;
+import com.project.resiRed.entity.User;
+import com.project.resiRed.enums.AssemblyStatus;
+import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.repository.AssemblyRepository;
 import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.repository.QuestionRepository;
@@ -40,6 +43,7 @@ public class AssemblyServiceImpl implements AssemblyService{
         assembly.setDescription(request.getDescription());
         assembly.setDate(request.getDate());
         assembly.setStartTime(request.getStartTime());
+        assembly.setStatus(AssemblyStatus.SCHEDULED);
 
         for(Long surveyId: request.getSurveys()){
             Survey survey =surveyRepository.findById(surveyId).get();
@@ -88,4 +92,48 @@ public class AssemblyServiceImpl implements AssemblyService{
         }
         return respondAssemblies;
     }
+
+    @Override
+    public AssemblyAvailabilityResponse checkAvailability(Long assemblyId, Long userId) {
+        Assembly assembly = assemblyRepository.findById(assemblyId).get();
+        User user = userRepository.findById(userId).get();
+
+        if (user.getRole() == UserRole.ADMIN) {
+            LocalDate date = assembly.getDate();
+            LocalTime time = assembly.getStartTime();
+
+            LocalDateTime dateTime = LocalDateTime.of(date.getYear(),
+                    date.getMonthValue(), date.getDayOfMonth(),
+                    time.getHour(), time.getMinute(), time.getSecond());
+
+            System.out.println("ESTA MIERDA " + dateTime + " ESTA OTRA MIERDA " + LocalDateTime.now());
+
+            if (LocalDateTime.now().isBefore(dateTime)) {
+                assembly.setStatus(AssemblyStatus.OPENED);
+                return AssemblyAvailabilityResponse.builder()
+                        .flag(false)
+                        .date(assembly.getDate())
+                        .startTime(assembly.getStartTime())
+                        .build();
+            } else {
+                return AssemblyAvailabilityResponse.builder()
+                        .flag(true)
+                        .build();
+            }
+        } else {
+            if (assembly.getStatus() != AssemblyStatus.OPENED) {
+                return AssemblyAvailabilityResponse.builder()
+                        .flag(false)
+                        .date(assembly.getDate())
+                        .startTime(assembly.getStartTime())
+                        .build();
+            } else{
+            return AssemblyAvailabilityResponse.builder()
+                    .flag(true)
+                    .build();
+            }
+        }
+
+        }
+
 }

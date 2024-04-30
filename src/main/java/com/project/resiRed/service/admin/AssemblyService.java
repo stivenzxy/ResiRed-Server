@@ -1,9 +1,6 @@
 package com.project.resiRed.service.admin;
 
-import com.project.resiRed.dto.AssemblyDto.AssemblyResponse;
-import com.project.resiRed.dto.AssemblyDto.createAssemblyRequest;
-import com.project.resiRed.dto.AssemblyDto.surveysOverviewRequest;
-import com.project.resiRed.dto.AssemblyDto.surveysOverviewResponse;
+import com.project.resiRed.dto.AssemblyDto.*;
 import com.project.resiRed.dto.MessageDto;
 
 import java.util.List;
@@ -19,5 +16,8 @@ public interface AssemblyService {
     MessageDto deleteAssembly(Long assemblyId);
 
    List<AssemblyResponse> getAllAssemblies();
+
+   AssemblyAvailabilityResponse checkAvailability(Long assemblyId, Long userId);
+
 
 }

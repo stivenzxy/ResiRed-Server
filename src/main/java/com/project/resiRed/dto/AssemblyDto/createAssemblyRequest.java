@@ -1,5 +1,6 @@
 package com.project.resiRed.dto.AssemblyDto;
 
+import com.project.resiRed.enums.AssemblyStatus;
 import lombok.Data;
 
 import java.time.LocalDate;

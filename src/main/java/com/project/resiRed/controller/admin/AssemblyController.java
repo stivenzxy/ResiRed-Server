@@ -1,5 +1,6 @@
 package com.project.resiRed.controller.admin;
 
+import com.project.resiRed.dto.AssemblyDto.AssemblyAvailabilityResponse;
 import com.project.resiRed.dto.AssemblyDto.AssemblyResponse;
 import org.springframework.http.ResponseEntity;
 import com.project.resiRed.dto.AssemblyDto.createAssemblyRequest;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -40,5 +42,11 @@ public class AssemblyController {
     @GetMapping("history")
     public ResponseEntity<List<AssemblyResponse>> getAllAssemblies() {
         return ResponseEntity.ok(assemblyService.getAllAssemblies());
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('OWNER')")
+    @GetMapping("check/{assemblyId}/{userId}")
+    public ResponseEntity<AssemblyAvailabilityResponse> checkAvailability(@PathVariable Long assemblyId, @PathVariable Long userId){
+        return ResponseEntity.ok(assemblyService.checkAvailability(assemblyId, userId));
     }
 }
