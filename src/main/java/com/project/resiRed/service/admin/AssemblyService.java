@@ -17,6 +17,8 @@ public interface AssemblyService {
 
     List<AssemblyResponse> getAllAssemblies();
 
-    //AssemblyAvailabilityResponse checkAvailability();
+    ScheduledAssemblyResponse checkScheduled();
+
+    AssemblyAvailabilityResponse checkAvailability(Long assemblyId);
 
 }

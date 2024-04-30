@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AssemblyAvailabilityResponse {
-    private Boolean flag;
+    private Boolean isAvailable;
     private LocalDate date;
     private LocalTime startTime;
 }

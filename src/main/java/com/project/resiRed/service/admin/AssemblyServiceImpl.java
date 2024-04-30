@@ -95,32 +95,48 @@ public class AssemblyServiceImpl implements AssemblyService{
         }
         return respondAssemblies;
     }
-/*
+
     @Override
-    public AssemblyAvailabilityResponse checkAvailability() {
-        Optional<Assembly> assembly= assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED);
-
-        LocalDate date = assembly.getDate();
-        LocalTime time = assembly.getStartTime();
-
-        LocalDateTime dateTime = LocalDateTime.of(date.getYear(),
-                date.getMonthValue(), date.getDayOfMonth(),
-                time.getHour(), time.getMinute(), time.getSecond());
-
-        if (LocalDateTime.now().isBefore(dateTime)) {
-            return AssemblyAvailabilityResponse.builder()
-                    .flag(false)
-                    .date(assembly.getDate())
-                    .startTime(assembly.getStartTime())
+    public ScheduledAssemblyResponse checkScheduled() {
+        Optional<Assembly> assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED.name());
+        if (assembly.isPresent()){
+            return ScheduledAssemblyResponse.builder()
+                    .isPresent(true)
+                    .id(assembly.get().getAssemblyId())
+                    .title(assembly.get().getTitle())
+                    .date(assembly.get().getDate())
+                    .startTime(assembly.get().getStartTime())
                     .build();
-        } else {
-            return AssemblyAvailabilityResponse.builder()
-                    .flag(true)
+        } else{
+            return ScheduledAssemblyResponse.builder()
+                    .isPresent(false)
                     .build();
         }
     }
 
- */
+    @Override
+    public AssemblyAvailabilityResponse checkAvailability(Long assemblyId) {
+        Assembly assembly = assemblyRepository.findById(assemblyId).get();
+
+            LocalDate date = assembly.getDate();
+            LocalTime time = assembly.getStartTime();
+
+            LocalDateTime dateTime = LocalDateTime.of(date.getYear(),
+                    date.getMonthValue(), date.getDayOfMonth(),
+                    time.getHour(), time.getMinute(), time.getSecond());
+
+            if (LocalDateTime.now().isBefore(dateTime)) {
+                return AssemblyAvailabilityResponse.builder()
+                        .isAvailable(false)
+                        .date(assembly.getDate())
+                        .startTime(assembly.getStartTime())
+                        .build();
+            } else {
+                return AssemblyAvailabilityResponse.builder()
+                        .isAvailable(true)
+                        .build();
+            }
+        }
 
 
 }

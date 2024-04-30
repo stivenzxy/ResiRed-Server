@@ -13,6 +13,6 @@ import java.util.Optional;
 @Repository
 public interface AssemblyRepository extends JpaRepository<Assembly,Long> {
 
-    @Query(value = "SELECT * FROM assemblies WHERE status = :status LIMIT 1", nativeQuery = true)
-    Optional<Assembly> findByStatus(AssemblyStatus status);
+    @Query(value="SELECT * FROM assemblies a WHERE a.status = :status LIMIT 1",nativeQuery = true)
+    Optional<Assembly> findByStatus(String status);
 }

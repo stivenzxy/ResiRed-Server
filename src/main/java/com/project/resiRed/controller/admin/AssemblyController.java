@@ -42,13 +42,18 @@ public class AssemblyController {
     }
 
 
-    /*
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('OWNER')")
-    @GetMapping("check/")
-    public ResponseEntity<AssemblyAvailabilityResponse> checkAvailability(@PathVariable Long assemblyId){
-        return ResponseEntity.ok(assemblyService.checkAvailability());
+    @GetMapping("scheduled")
+        public ResponseEntity<?> checkScheduled(){
+        return ResponseEntity.ok(assemblyService.checkScheduled());
     }
-*/
+
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('OWNER')")
+    @GetMapping("available/{assemblyId}")
+    public ResponseEntity<?> checkAvailability(@PathVariable Long assemblyId){
+        return ResponseEntity.ok(assemblyService.checkAvailability(assemblyId));
+    }
+
 
 
 
