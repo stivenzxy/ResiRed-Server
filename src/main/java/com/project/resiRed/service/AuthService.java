@@ -43,12 +43,10 @@ public class AuthService {
                 .build();
 
         userRepository.save(user);
-        String accessToken = jwtService.getToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
+
         return AuthResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
+                .accessToken("")
+                .refreshToken("")
                 .build();
     }
-
 }

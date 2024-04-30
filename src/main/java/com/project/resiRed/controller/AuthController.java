@@ -93,9 +93,7 @@ public class AuthController {
                 return ResponseEntity.badRequest().body(errorResponse);
             }
 
-            int line=0;
             for (CSVRecord csvRecord : csvParser) {
-                if(line!=0) {
                     //System.out.println("ENTRO V2");
                     RegisterRequest request = new RegisterRequest();
                     request.setName(csvRecord.get(0));
@@ -106,9 +104,8 @@ public class AuthController {
                     request.setEmail(csvRecord.get(4));
                     authService.register(request);
                     usersToSave.add(request);
-                }
-                line++;
             }
+
 
         } catch (Exception e) {
             System.err.println("Error!!: " + e.getMessage());

@@ -12,6 +12,4 @@ public class UserDto {
     String firstname;
     String lastname;
     String address;
-
-
 }
