@@ -87,6 +87,7 @@ public class User implements UserDetails {
 
     public UserDto getDto(){
         UserDto newUserDto=new UserDto();
+        newUserDto.setUserId(getUserId().intValue());
         newUserDto.setFirstname(getFirstName());
         newUserDto.setLastname(getLastname());
         newUserDto.setAddress(getAddress());

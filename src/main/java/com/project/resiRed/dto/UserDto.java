@@ -1,5 +1,6 @@
 package com.project.resiRed.dto;
 
+import com.project.resiRed.entity.Assembly;
 import com.project.resiRed.entity.User;
 import lombok.*;
 
