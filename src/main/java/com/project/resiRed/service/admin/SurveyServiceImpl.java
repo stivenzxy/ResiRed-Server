@@ -2,6 +2,7 @@ package com.project.resiRed.service.admin;
 
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
+import com.project.resiRed.dto.SurveyDto.SurveyDto;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
 import com.project.resiRed.dto.SurveyDto.unassignedSurveysResponse;
@@ -29,6 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -143,5 +145,11 @@ public class SurveyServiceImpl implements SurveyService{
         surveyRepository.save(survey);
 
         return new newQuestionResponse(question.getQuestionId(), "Question added to Survey");
+    }
+
+    @Override
+    public SurveyDto getSurveyById(Long id) {
+        Optional<Survey> findSurvey=surveyRepository.findById(id);
+        return findSurvey.get().getDto();
     }
 }

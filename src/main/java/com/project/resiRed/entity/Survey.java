@@ -1,5 +1,6 @@
 package com.project.resiRed.entity;
 
+import com.project.resiRed.dto.SurveyDto.SurveyDto;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,4 +26,16 @@ public class Survey {
     @Nullable
     @JoinColumn(name="assembly_id")
     private Assembly assembly;
+
+    public SurveyDto getDto() {
+        SurveyDto dto = new SurveyDto();
+        dto.setSurveyId(surveyId);
+        dto.setTopic(topic);
+        dto.setCreatedAt(createdAt);
+        dto.setQuestions(questions);  // Asumiendo que las preguntas también tienen su propio método getDto()
+        if (assembly != null) {
+            dto.setAssembly(assembly);  // Esta línea puede requerir un getDto() en Assembly si solo deseas enviar un DTO de Assembly
+        }
+        return dto;
+    }
 }

@@ -1,6 +1,7 @@
 package com.project.resiRed.service.admin;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
+import com.project.resiRed.dto.SurveyDto.SurveyDto;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
 import com.project.resiRed.dto.SurveyDto.unassignedSurveysResponse;
@@ -20,6 +21,7 @@ public interface SurveyService {
     MessageDto deleteSurvey(Long surveyId);
 
     newQuestionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request);
+    SurveyDto getSurveyById(Long id);
 
 
 }

@@ -10,6 +10,7 @@ import com.project.resiRed.service.admin.AssemblyService;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,9 +50,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(null);
         }
         User user = new User(userDto.getUserId(),userDto.getFirstname(), userDto.getLastname(), userDto.getEmail(),userDto.getAddress());
-        List<User> existingAtendees= assembly.getAttendees();
-        existingAtendees.add(user);
-        assembly.setAttendees(existingAtendees);
+        assembly.getAttendees().add(user);
 
 
         assemblyService.updateAttendies(assembly);

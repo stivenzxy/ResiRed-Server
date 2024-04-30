@@ -57,4 +57,5 @@ public class AssemblyController {
         }
         return ResponseEntity.ok(attendesToAssembly);
     }
+
 }
