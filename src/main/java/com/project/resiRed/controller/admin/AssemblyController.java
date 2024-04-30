@@ -37,8 +37,8 @@ public class AssemblyController {
     }
 
     @GetMapping("history")
-    public ResponseEntity<List<AssemblyResponse>> getAllAssemblies() {
-        return ResponseEntity.ok(assemblyService.getAllAssemblies());
+    public ResponseEntity<List<AssemblyResponse>> getAllAssembliesHistory() {
+        return ResponseEntity.ok(assemblyService.getAllAssembliesHistory());
     }
 
 

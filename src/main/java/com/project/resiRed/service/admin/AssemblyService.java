@@ -15,7 +15,7 @@ public interface AssemblyService {
 
     MessageDto deleteAssembly(Long assemblyId);
 
-    List<AssemblyResponse> getAllAssemblies();
+    List<AssemblyResponse> getAllAssembliesHistory();
 
     ScheduledAssemblyResponse checkScheduled();
 

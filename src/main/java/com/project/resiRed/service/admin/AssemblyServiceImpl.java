@@ -87,8 +87,8 @@ public class AssemblyServiceImpl implements AssemblyService{
 
 
     @Override
-    public List<AssemblyResponse> getAllAssemblies() {
-        List<Assembly> assemblies = assemblyRepository.findAll();
+    public List<AssemblyResponse> getAllAssembliesHistory() {
+        List<Assembly> assemblies = assemblyRepository.findAllHistory();
         List<AssemblyResponse> respondAssemblies = new ArrayList<>();
         for (Assembly assembly : assemblies) {
             respondAssemblies.add(assembly.getDto());
