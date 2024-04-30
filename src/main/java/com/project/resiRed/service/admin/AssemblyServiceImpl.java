@@ -1,6 +1,7 @@
 package com.project.resiRed.service.admin;
 
 import com.project.resiRed.dto.AssemblyDto;
+import com.project.resiRed.dto.UserDto;
 import com.project.resiRed.entity.Assembly;
 import com.project.resiRed.entity.Survey;
 import com.project.resiRed.entity.User;
@@ -67,16 +68,29 @@ public class AssemblyServiceImpl implements AssemblyService{
 
     @Override
     public AssemblyDto updateAttendies(AssemblyDto assemblyDto) {
-        Optional<Assembly> assembly=assemblyRepository.findById(assemblyDto.getAssemblyId());
-        Assembly assembly1=assembly.get();
-        if(assembly!=null){
-            assembly1.setAttendees(assemblyDto.getAttendees());
-            Assembly updatedAssembly=assemblyRepository.save(assembly1);
-            return  updatedAssembly.getDto();
+        Optional<Assembly> optionalAssembly = assemblyRepository.findById(assemblyDto.getAssemblyId());
+        if (optionalAssembly.isPresent()) {
+            Assembly assembly = optionalAssembly.get();
+
+            List<User> attendees = new ArrayList<>();
+            for (User users : assemblyDto.getAttendees()) {
+                User user = new User();
+                user.setUserId((long) users.getUserId());
+                user.setName(users.getName());
+                user.setLastname(users.getLastname());
+                user.setEmail(users.getEmail());
+                user.setAddress(users.getAddress());
+                attendees.add(user);
+            }
+            assembly.setAttendees(attendees);
+
+            Assembly updatedAssembly = assemblyRepository.save(assembly);
+
+            return updatedAssembly.getDto();
         }
         return null;
-
     }
+
 
 
 }

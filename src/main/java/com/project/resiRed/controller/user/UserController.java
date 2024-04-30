@@ -43,18 +43,16 @@ public class UserController {
     }
     @PostMapping("/attendance")
     public ResponseEntity<UserDto> createAttendance(@RequestParam Long userId, @RequestParam Long assemblyId) {
-        System.out.printf("ENTRO 1");
         UserDto userDto = userService.getUser(userId.intValue());
-        System.out.printf("ENTRO 2"+ userDto.getFirstname());
         AssemblyDto assembly = assemblyService.getAssemblyById(assemblyId);
-        System.out.printf("ENTRO 3");
         if (userDto == null || assembly == null) {
-            System.out.printf("NO DEBERIA ESTAR ENTRANDO");
             return ResponseEntity.badRequest().body(null);
         }
         User user = new User(userDto.getUserId(),userDto.getFirstname(), userDto.getLastname(), userDto.getEmail(),userDto.getAddress());
-        System.out.printf(" AAA "+ user);
-        assembly.getAttendees().add(user);
+        List<User> existingAtendees= assembly.getAttendees();
+        existingAtendees.add(user);
+        assembly.setAttendees(existingAtendees);
+
 
         assemblyService.updateAttendies(assembly);
 

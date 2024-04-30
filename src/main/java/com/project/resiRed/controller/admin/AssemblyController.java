@@ -45,15 +45,15 @@ public class AssemblyController {
     @GetMapping("/{assemblyId}/attendances")
     public ResponseEntity<List<UserDto>> getAttendances(@PathVariable Long assemblyId) {
         AssemblyDto assembly = assemblyService.getAssemblyById(assemblyId);
-
         if (assembly == null) {
             return ResponseEntity.notFound().build();
         }
-
         List<User> attendees =assembly.getAttendees();
+
         List<UserDto> attendesToAssembly=new ArrayList<>();
         for(User user:attendees){
             attendesToAssembly.add(user.getDto());
+            System.out.println("USER: "+user);
         }
         return ResponseEntity.ok(attendesToAssembly);
     }

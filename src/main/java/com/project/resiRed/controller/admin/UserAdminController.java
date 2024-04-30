@@ -19,9 +19,7 @@ public class UserAdminController {
 
     @GetMapping("getAll")
     public ResponseEntity<List<UserDto>> getAllRegisteredUsers(){
-        System.out.printf("ENTRAMOS");
         List<UserDto> userDtoList=userService.getAllUsers();
-        System.out.printf("ENTRAMOS X2");
         return ResponseEntity.ok(userDtoList);
     }
 }
