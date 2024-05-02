@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScheduledAssemblyResponse {
-    private Boolean isPresent;
+    private Boolean isScheduled;
     private String title;
     private LocalDate date;
     private LocalTime startTime;

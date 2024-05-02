@@ -109,7 +109,7 @@ public class AssemblyServiceImpl implements AssemblyService{
                     time.getHour(), time.getMinute(), time.getSecond());
 
             return ScheduledAssemblyResponse.builder()
-                    .isPresent(true)
+                    .isScheduled(true)
                     .title(assembly.get().getTitle())
                     .date(assembly.get().getDate())
                     .startTime(assembly.get().getStartTime())
@@ -118,7 +118,7 @@ public class AssemblyServiceImpl implements AssemblyService{
                     .build();
         } else{
             return ScheduledAssemblyResponse.builder()
-                    .isPresent(false)
+                    .isScheduled(false)
                     .build();
         }
     }
