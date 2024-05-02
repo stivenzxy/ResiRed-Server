@@ -15,7 +15,7 @@ public class Question {
     @Column(name = "question_id")
     private Long questionId;
     private String description;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="survey_id")
     private Survey survey;
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)

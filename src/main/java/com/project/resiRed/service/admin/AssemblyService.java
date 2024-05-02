@@ -19,4 +19,6 @@ public interface AssemblyService {
 
     ScheduledAssemblyResponse checkScheduledAssembly();
 
+    MessageDto cancelScheduledAssembly();
+
 }

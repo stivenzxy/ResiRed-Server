@@ -21,7 +21,7 @@ public class Survey {
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
     private List<Question> questions;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @Nullable
     @JoinColumn(name="assembly_id")
     private Assembly assembly;

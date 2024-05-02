@@ -113,8 +113,7 @@ public class AssemblyServiceImpl implements AssemblyService{
                     .title(assembly.get().getTitle())
                     .date(assembly.get().getDate())
                     .startTime(assembly.get().getStartTime())
-                    .isAvailable(LocalDateTime.now().isBefore(dateTime))
-                    .id(assembly.get().getAssemblyId())
+                    .isAvailable(LocalDateTime.now().isAfter(dateTime))
                     .build();
         } else{
             return ScheduledAssemblyResponse.builder()
@@ -123,7 +122,15 @@ public class AssemblyServiceImpl implements AssemblyService{
         }
     }
 
-
+    @Override
+    public MessageDto cancelScheduledAssembly(){
+        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED.name()).get();
+        assembly.setStatus(AssemblyStatus.CANCELED);
+        assemblyRepository.save(assembly);
+        return MessageDto.builder()
+                .detail("Assembly canceled")
+                .build();
+    }
 
 
 }

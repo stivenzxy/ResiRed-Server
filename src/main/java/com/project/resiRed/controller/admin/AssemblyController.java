@@ -43,10 +43,18 @@ public class AssemblyController {
 
 
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('OWNER')")
-    @GetMapping("scheduled")
+    @GetMapping("check/scheduled")
         public ResponseEntity<?> checkScheduledAssembly(){
         return ResponseEntity.ok(assemblyService.checkScheduledAssembly());
     }
+
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("cancel/scheduled")
+    public ResponseEntity<?> cancelScheduledAssembly(){
+        return ResponseEntity.ok(assemblyService.cancelScheduledAssembly());
+    }
+
 
 
 }
