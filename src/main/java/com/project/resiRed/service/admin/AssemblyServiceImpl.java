@@ -97,15 +97,23 @@ public class AssemblyServiceImpl implements AssemblyService{
     }
 
     @Override
-    public ScheduledAssemblyResponse checkScheduled() {
+    public ScheduledAssemblyResponse checkScheduledAssembly() {
         Optional<Assembly> assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED.name());
         if (assembly.isPresent()){
+
+            LocalDate date = assembly.get().getDate();
+            LocalTime time = assembly.get().getStartTime();
+
+            LocalDateTime dateTime = LocalDateTime.of(date.getYear(),
+                    date.getMonthValue(), date.getDayOfMonth(),
+                    time.getHour(), time.getMinute(), time.getSecond());
+
             return ScheduledAssemblyResponse.builder()
                     .isPresent(true)
-                    .id(assembly.get().getAssemblyId())
                     .title(assembly.get().getTitle())
                     .date(assembly.get().getDate())
                     .startTime(assembly.get().getStartTime())
+                    .isAvailable(LocalDateTime.now().isBefore(dateTime))
                     .build();
         } else{
             return ScheduledAssemblyResponse.builder()
@@ -114,29 +122,7 @@ public class AssemblyServiceImpl implements AssemblyService{
         }
     }
 
-    @Override
-    public AssemblyAvailabilityResponse checkAvailability(Long assemblyId) {
-        Assembly assembly = assemblyRepository.findById(assemblyId).get();
 
-            LocalDate date = assembly.getDate();
-            LocalTime time = assembly.getStartTime();
-
-            LocalDateTime dateTime = LocalDateTime.of(date.getYear(),
-                    date.getMonthValue(), date.getDayOfMonth(),
-                    time.getHour(), time.getMinute(), time.getSecond());
-
-            if (LocalDateTime.now().isBefore(dateTime)) {
-                return AssemblyAvailabilityResponse.builder()
-                        .isAvailable(false)
-                        .date(assembly.getDate())
-                        .startTime(assembly.getStartTime())
-                        .build();
-            } else {
-                return AssemblyAvailabilityResponse.builder()
-                        .isAvailable(true)
-                        .build();
-            }
-        }
 
 
 }
