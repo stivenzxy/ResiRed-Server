@@ -114,6 +114,7 @@ public class AssemblyServiceImpl implements AssemblyService{
                     .date(assembly.get().getDate())
                     .startTime(assembly.get().getStartTime())
                     .isAvailable(LocalDateTime.now().isBefore(dateTime))
+                    .id(assembly.get().getAssemblyId())
                     .build();
         } else{
             return ScheduledAssemblyResponse.builder()

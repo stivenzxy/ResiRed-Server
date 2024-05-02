@@ -18,4 +18,5 @@ public class ScheduledAssemblyResponse {
     private LocalDate date;
     private LocalTime startTime;
     private Boolean isAvailable;
+    private Long id;
 }
