@@ -11,3 +11,4 @@ public class ResiRedApplication {
 		SpringApplication.run(ResiRedApplication.class, args);
 	}
 }
+

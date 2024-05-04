@@ -67,8 +67,9 @@ public class SurveyServiceImpl implements SurveyService{
     }
 
     @Override
-    public List<unassignedSurveysResponse> getAllUnassignedSurveys() {
-        List<Survey> allSurveys = surveyRepository.findAllAssemblyIsNull();
+    public List<unassignedSurveysResponse> getAlLEditableSurveys() {
+        List<Survey> allSurveys = surveyRepository.findAllEditable();
+
         List<unassignedSurveysResponse> response = new ArrayList<unassignedSurveysResponse>();
         for (Survey survey : allSurveys) {
             response.add(unassignedSurveysResponse.builder()

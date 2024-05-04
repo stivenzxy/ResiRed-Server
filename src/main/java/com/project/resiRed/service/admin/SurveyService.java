@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface SurveyService {
     MessageDto createSurvey(createSurveyRequest request);
-    List<unassignedSurveysResponse> getAllUnassignedSurveys();
+    List<unassignedSurveysResponse> getAlLEditableSurveys();
 
     List<questionResponse> getSurveyQuestions(Long surveyId);
 

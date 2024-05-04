@@ -40,9 +40,9 @@ public class surveyController {
     }
 
 
-    @GetMapping(value = "list/unassigned")
-    public  ResponseEntity<List<unassignedSurveysResponse>> getAllUnassignedSurveys(){
-            return ResponseEntity.ok(surveyService.getAllUnassignedSurveys());
+    @GetMapping(value = "list/edit")
+    public  ResponseEntity<List<unassignedSurveysResponse>> getAlLSurveys(){
+            return ResponseEntity.ok(surveyService.getAlLEditableSurveys());
     }
 
     @GetMapping(value = "{id}/list/questions")

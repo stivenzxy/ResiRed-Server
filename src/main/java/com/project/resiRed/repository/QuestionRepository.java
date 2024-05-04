@@ -21,6 +21,5 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     //@Query("SELECT q.id, q.description FROM Question q WHERE q.survey.id = :surveyId")
 
     @Query("SELECT q FROM Question q WHERE q.survey = :survey ORDER BY q.id ASC")
-
     List<Question> findAllBySurvey(Survey survey);
 }

@@ -127,6 +127,14 @@ public class AssemblyServiceImpl implements AssemblyService{
         Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED.name()).get();
         assembly.setStatus(AssemblyStatus.CANCELED);
         assemblyRepository.save(assembly);
+
+        List<Survey> surveys = surveyRepository.findAllByAssembly(assembly);
+
+        for(Survey survey : surveys){
+            survey.setAssembly(null);
+            surveyRepository.save(survey);
+        }
+
         return MessageDto.builder()
                 .detail("Assembly canceled")
                 .build();
