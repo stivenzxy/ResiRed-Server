@@ -98,7 +98,7 @@ public class AssemblyServiceImpl implements AssemblyService{
 
     @Override
     public ScheduledAssemblyResponse checkScheduledAssembly() {
-        Optional<Assembly> assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED.name());
+        Optional<Assembly> assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED).stream().findFirst();
         if (assembly.isPresent()){
 
             LocalDate date = assembly.get().getDate();
@@ -124,7 +124,7 @@ public class AssemblyServiceImpl implements AssemblyService{
 
     @Override
     public MessageDto cancelScheduledAssembly(){
-        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED.name()).get();
+        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED).stream().findFirst().get();
         assembly.setStatus(AssemblyStatus.CANCELED);
         assemblyRepository.save(assembly);
 

@@ -3,8 +3,9 @@ package com.project.resiRed.service.admin;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
+import com.project.resiRed.dto.SurveyDto.currentSurveyResponse;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
-import com.project.resiRed.dto.SurveyDto.unassignedSurveysResponse;
+import com.project.resiRed.dto.SurveyDto.SurveysResponse;
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
 import com.project.resiRed.dto.QuestionDto.questionResponse;
 import com.project.resiRed.dto.ChoiceDto.choiceResponse;
@@ -28,7 +29,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +52,7 @@ public class SurveyServiceImpl implements SurveyService{
         for (createQuestionRequest questionDto : request.getQuestions()) {
             Question question = new Question();
             question.setDescription(questionDto.getDescription());
+            question.setVoted(false);
             question.setSurvey(survey);
             question.setChoices(new ArrayList<>());
             for (createChoiceRequest choiceDto : questionDto.getChoices()) {
@@ -67,12 +71,12 @@ public class SurveyServiceImpl implements SurveyService{
     }
 
     @Override
-    public List<unassignedSurveysResponse> getAlLEditableSurveys() {
+    public List<SurveysResponse> getAlLEditableSurveys() {
         List<Survey> allSurveys = surveyRepository.findAllEditable();
 
-        List<unassignedSurveysResponse> response = new ArrayList<unassignedSurveysResponse>();
+        List<SurveysResponse> response = new ArrayList<SurveysResponse>();
         for (Survey survey : allSurveys) {
-            response.add(unassignedSurveysResponse.builder()
+            response.add(SurveysResponse.builder()
                     .surveyId(survey.getSurveyId())
                     .dateCreated(survey.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     .topic(survey.getTopic())
@@ -129,6 +133,7 @@ public class SurveyServiceImpl implements SurveyService{
         Survey survey = surveyRepository.findById(surveyId).get();
         Question question = new Question();
         question.setDescription(request.getDescription());
+        question.setVoted(false);
         question.setSurvey(survey);
         question.setChoices(new ArrayList<>());
         for (createChoiceRequest choiceDto : request.getChoices()) {
@@ -144,5 +149,24 @@ public class SurveyServiceImpl implements SurveyService{
         surveyRepository.save(survey);
 
         return new newQuestionResponse(question.getQuestionId(), "Question added to Survey");
+    }
+
+
+    @Override
+    public currentSurveyResponse checkNextSurvey(){
+        List<Long> survey_id = surveyRepository.findCurrentSurvey();
+
+        if(!survey_id.isEmpty()){
+            return currentSurveyResponse.builder()
+                    .id(survey_id.get(0))
+                    .isLastQuestion(Collections.frequency(survey_id, survey_id.get(0)) == 1)
+                    .isLastSurvey(false)
+                    .build();
+        }
+        return currentSurveyResponse.builder()
+                .id(null)
+                .isLastQuestion(true)
+                .isLastSurvey(true)
+                .build();
     }
 }

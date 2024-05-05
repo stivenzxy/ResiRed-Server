@@ -2,6 +2,7 @@ package com.project.resiRed.controller.admin;
 
 
 import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
+import com.project.resiRed.dto.SurveyDto.currentSurveyResponse;
 import com.project.resiRed.service.admin.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,21 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
-import com.project.resiRed.dto.SurveyDto.unassignedSurveysResponse;
+import com.project.resiRed.dto.SurveyDto.SurveysResponse;
 import com.project.resiRed.dto.QuestionDto.questionResponse;
 
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
 
 import java.util.List;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.http.HttpStatus;
-
-import java.util.Collection;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 
 @RestController
@@ -41,7 +33,7 @@ public class surveyController {
 
 
     @GetMapping(value = "list/edit")
-    public  ResponseEntity<List<unassignedSurveysResponse>> getAlLSurveys(){
+    public  ResponseEntity<List<SurveysResponse>> getAlLSurveys(){
             return ResponseEntity.ok(surveyService.getAlLEditableSurveys());
     }
 
@@ -64,6 +56,11 @@ public class surveyController {
     public  ResponseEntity<newQuestionResponse> addQuestiontoSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request){
             return ResponseEntity.ok(surveyService.addQuestiontoSurvey(id, request));
 
+    }
+
+    @GetMapping(value = "check")
+    public ResponseEntity<currentSurveyResponse> checkNextSurvey(){
+        return ResponseEntity.ok(surveyService.checkNextSurvey());
     }
 
 }

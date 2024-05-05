@@ -15,6 +15,7 @@ public class Question {
     @Column(name = "question_id")
     private Long questionId;
     private String description;
+    private Boolean voted;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="survey_id")
     private Survey survey;
