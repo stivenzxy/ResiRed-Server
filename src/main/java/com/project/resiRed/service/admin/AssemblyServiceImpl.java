@@ -48,8 +48,7 @@ public class AssemblyServiceImpl implements AssemblyService{
         assembly.setStartTime(request.getStartTime());
         assembly.setStatus(AssemblyStatus.SCHEDULED);
 
-        for(Long surveyId: request.getSurveys()){
-            Survey survey =surveyRepository.findById(surveyId).get();
+        for(Survey survey: surveyRepository.findAllById(request.getSurveys())) {
             survey.setAssembly(assembly);
         }
 
@@ -64,7 +63,7 @@ public class AssemblyServiceImpl implements AssemblyService{
 
         for(Survey survey : surveyRepository.findAllById(request.getSurveys())){
             List<questionOverviewResponse> questions = new ArrayList<questionOverviewResponse>();
-            for(Question question : questionRepository.findAllBySurvey(survey)){
+            for(Question question : survey.getQuestions()){
                 questions.add(questionOverviewResponse.builder()
                         .description(question.getDescription())
                         .build());

@@ -3,7 +3,7 @@ package com.project.resiRed.service.admin;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
-import com.project.resiRed.dto.SurveyDto.currentSurveyResponse;
+import com.project.resiRed.dto.SurveyDto.nextSurveyResponse;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
 import com.project.resiRed.dto.SurveyDto.SurveysResponse;
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
@@ -12,6 +12,7 @@ import com.project.resiRed.dto.ChoiceDto.choiceResponse;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 
 
+import com.project.resiRed.enums.AssemblyStatus;
 import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.repository.QuestionRepository;
 import com.project.resiRed.repository.ChoiceRepository;
@@ -31,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +53,7 @@ public class SurveyServiceImpl implements SurveyService{
             Question question = new Question();
             question.setDescription(questionDto.getDescription());
             question.setVoted(false);
+            question.setCanBeVoted(false);
             question.setSurvey(survey);
             question.setChoices(new ArrayList<>());
             for (createChoiceRequest choiceDto : questionDto.getChoices()) {
@@ -93,9 +94,9 @@ public class SurveyServiceImpl implements SurveyService{
 
         List<questionResponse> response = new ArrayList<questionResponse>();
 
-        for (Question question : questionRepository.findAllBySurvey(survey)) {
+        for (Question question : survey.getQuestions()) {
             List<choiceResponse> choices = new ArrayList<choiceResponse>();
-            for (Choice choice : choiceRepository.findAllByQuestion(question)) {
+            for (Choice choice : question.getChoices()) {
                 choices.add(choiceResponse.builder()
                         .choiceId(choice.getChoiceId())
                         .description(choice.getDescription()).build());
@@ -131,7 +132,9 @@ public class SurveyServiceImpl implements SurveyService{
     @Override
     public newQuestionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
         Survey survey = surveyRepository.findById(surveyId).get();
+
         Question question = new Question();
+
         question.setDescription(request.getDescription());
         question.setVoted(false);
         question.setSurvey(survey);
@@ -143,6 +146,13 @@ public class SurveyServiceImpl implements SurveyService{
             choice.setVotes(0);
             question.getChoices().add(choice);
         }
+
+        if(survey.getAssembly().getStatus()==AssemblyStatus.STARTED) {
+            question.setCanBeVoted(true);
+        }else{
+            question.setCanBeVoted(false);
+        }
+
         survey.getQuestions().add(question);
 
         questionRepository.saveAndFlush(question);
@@ -152,21 +162,7 @@ public class SurveyServiceImpl implements SurveyService{
     }
 
 
-    @Override
-    public currentSurveyResponse checkNextSurvey(){
-        List<Long> survey_id = surveyRepository.findCurrentSurvey();
 
-        if(!survey_id.isEmpty()){
-            return currentSurveyResponse.builder()
-                    .id(survey_id.get(0))
-                    .isLastQuestion(Collections.frequency(survey_id, survey_id.get(0)) == 1)
-                    .isLastSurvey(false)
-                    .build();
-        }
-        return currentSurveyResponse.builder()
-                .id(null)
-                .isLastQuestion(true)
-                .isLastSurvey(true)
-                .build();
-    }
+
+
 }

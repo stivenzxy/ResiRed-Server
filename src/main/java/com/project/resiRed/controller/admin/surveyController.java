@@ -2,7 +2,7 @@ package com.project.resiRed.controller.admin;
 
 
 import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
-import com.project.resiRed.dto.SurveyDto.currentSurveyResponse;
+import com.project.resiRed.dto.SurveyDto.nextSurveyResponse;
 import com.project.resiRed.service.admin.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,41 +27,37 @@ public class surveyController {
     private final SurveyService surveyService;
 
     @PostMapping(value = "create")
-    public  ResponseEntity<MessageDto> createSurvey(@RequestBody createSurveyRequest request){
-            return ResponseEntity.ok(surveyService.createSurvey(request));
+    public ResponseEntity<MessageDto> createSurvey(@RequestBody createSurveyRequest request) {
+        return ResponseEntity.ok(surveyService.createSurvey(request));
     }
 
 
     @GetMapping(value = "list/edit")
-    public  ResponseEntity<List<SurveysResponse>> getAlLSurveys(){
-            return ResponseEntity.ok(surveyService.getAlLEditableSurveys());
+    public ResponseEntity<List<SurveysResponse>> getAlLSurveys() {
+        return ResponseEntity.ok(surveyService.getAlLEditableSurveys());
     }
 
     @GetMapping(value = "{id}/list/questions")
-    public  ResponseEntity<List<questionResponse>> getSurveyQuestions(@PathVariable Long id){
-            return ResponseEntity.ok(surveyService.getSurveyQuestions(id));
+    public ResponseEntity<List<questionResponse>> getSurveyQuestions(@PathVariable Long id) {
+        return ResponseEntity.ok(surveyService.getSurveyQuestions(id));
     }
 
     @PutMapping(value = "{id}/update/topic")
-    public  ResponseEntity<MessageDto> updateSurveyTopic(@PathVariable Long id, @RequestBody  updateTopicRequest request){
-            return ResponseEntity.ok(surveyService.updateSurveyTopic(id, request));
+    public ResponseEntity<MessageDto> updateSurveyTopic(@PathVariable Long id, @RequestBody updateTopicRequest request) {
+        return ResponseEntity.ok(surveyService.updateSurveyTopic(id, request));
     }
 
     @DeleteMapping(value = "{id}/delete")
-    public  ResponseEntity<MessageDto> deleteSurvey(@PathVariable Long id){
-            return ResponseEntity.ok(surveyService.deleteSurvey(id));
+    public ResponseEntity<MessageDto> deleteSurvey(@PathVariable Long id) {
+        return ResponseEntity.ok(surveyService.deleteSurvey(id));
     }
 
     @PostMapping(value = "{id}/add/question")
-    public  ResponseEntity<newQuestionResponse> addQuestiontoSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request){
-            return ResponseEntity.ok(surveyService.addQuestiontoSurvey(id, request));
+    public ResponseEntity<newQuestionResponse> addQuestiontoSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request) {
+        return ResponseEntity.ok(surveyService.addQuestiontoSurvey(id, request));
 
     }
 
-    @GetMapping(value = "check")
-    public ResponseEntity<currentSurveyResponse> checkNextSurvey(){
-        return ResponseEntity.ok(surveyService.checkNextSurvey());
-    }
 
 }
 

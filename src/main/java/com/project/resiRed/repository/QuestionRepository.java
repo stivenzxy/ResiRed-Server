@@ -18,8 +18,15 @@ import org.springframework.data.repository.query.Param;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question,Long> {
-    //@Query("SELECT q.id, q.description FROM Question q WHERE q.survey.id = :surveyId")
 
-    @Query("SELECT q FROM Question q WHERE q.survey = :survey ORDER BY q.id ASC")
     List<Question> findAllBySurvey(Survey survey);
+
+
+    Optional<Question> findByCanBeVoted(Boolean canBeVoted);
+
+    List<Question> findBySurveyAndVoted(Survey survey, boolean voted);
+
+    @Query(value="select * from questions where survey_id=:survey and voted=false ORDER BY question_id ASC", nativeQuery = true)
+    List<Question> findNextQuestion(Long survey);
+
 }

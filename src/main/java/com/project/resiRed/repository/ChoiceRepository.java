@@ -12,6 +12,5 @@ import java.util.List;
 
 @Repository
 public interface ChoiceRepository extends JpaRepository<Choice,Long> {
-   // @Query("SELECT description FROM Choice c WHERE c.question.id = :questionId")
-    List<Choice> findAllByQuestion(Question question);
+   // List<Choice> findByQuestion(Question question);
 }

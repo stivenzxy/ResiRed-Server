@@ -5,7 +5,9 @@ import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 import com.project.resiRed.dto.ChoiceDto.newChoiceResponse;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
+import com.project.resiRed.dto.QuestionDto.questionResponse;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
+import com.project.resiRed.dto.SurveyDto.nextSurveyResponse;
 import com.project.resiRed.service.admin.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,5 +49,25 @@ public class QuestionController {
     @PostMapping(value = "{id}/add/choice")
     public  ResponseEntity<newChoiceResponse> addChoiceToQuestion(@PathVariable Long id, @RequestBody createChoiceRequest request){
             return ResponseEntity.ok(questionService.addChoiceToQuestion(id, request));
+    }
+
+    @GetMapping(value = "first")
+    public ResponseEntity<questionResponse> getFirstQuestion(){
+        return ResponseEntity.ok(questionService.getFirstQuestion());
+    }
+
+    @GetMapping(value = "next/{id}")
+    public ResponseEntity<questionResponse> getNextQuestion(@PathVariable Long id){
+        return ResponseEntity.ok(questionService.getNextQuestion(id));
+    }
+
+    @GetMapping(value = "current")
+    public ResponseEntity<questionResponse> getCurrentQuestion(){
+        return ResponseEntity.ok(questionService.getCurrentQuestion());
+    }
+
+    @PutMapping(value = "current/save/voting")
+    public ResponseEntity<nextSurveyResponse> saveVoting(){
+        return ResponseEntity.ok(questionService.saveVoting());
     }
 }

@@ -14,9 +14,11 @@ import java.util.Optional;
 @Repository
 public interface AssemblyRepository extends JpaRepository<Assembly,Long> {
 
-    @Query(value="SELECT a FROM Assembly a WHERE a.status = :status")
     List<Assembly> findByStatus(AssemblyStatus status);
 
     @Query("SELECT a FROM Assembly a WHERE a.status = 'FINISHED' or a.status = 'CANCELED'")
     List<Assembly> findAllHistory();
+
+
+    //List<Assembly> findByStatusOrStatus(AssemblyStatus status1, AssemblyStatus status2);
 }

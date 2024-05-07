@@ -2,7 +2,7 @@ package com.project.resiRed.service.admin;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
-import com.project.resiRed.dto.SurveyDto.currentSurveyResponse;
+import com.project.resiRed.dto.SurveyDto.nextSurveyResponse;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
 import com.project.resiRed.dto.SurveyDto.SurveysResponse;
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
@@ -22,5 +22,8 @@ public interface SurveyService {
 
     newQuestionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request);
 
-    currentSurveyResponse checkNextSurvey();
+
+
+
+
 }
