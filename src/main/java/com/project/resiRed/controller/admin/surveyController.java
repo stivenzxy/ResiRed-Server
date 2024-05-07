@@ -2,7 +2,6 @@ package com.project.resiRed.controller.admin;
 
 
 import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
-import com.project.resiRed.dto.SurveyDto.currentSurveyResponse;
 import com.project.resiRed.service.admin.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
-import com.project.resiRed.dto.SurveyDto.SurveysResponse;
+import com.project.resiRed.dto.SurveyDto.SurveysListResponse;
 import com.project.resiRed.dto.QuestionDto.questionResponse;
 
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
@@ -33,7 +32,7 @@ public class surveyController {
 
 
     @GetMapping(value = "list/edit")
-    public  ResponseEntity<List<SurveysResponse>> getAlLSurveys(){
+    public  ResponseEntity<List<SurveysListResponse>> getAlLSurveys(){
             return ResponseEntity.ok(surveyService.getAlLEditableSurveys());
     }
 
@@ -58,9 +57,9 @@ public class surveyController {
 
     }
 
-    @GetMapping(value = "check")
-    public ResponseEntity<currentSurveyResponse> checkNextSurvey(){
-        return ResponseEntity.ok(surveyService.checkNextSurvey());
+    @GetMapping(value = "list/voting")
+    public ResponseEntity<?> getAllAssemblySurveys(){
+        return ResponseEntity.ok(surveyService.getAllAssemblySurveys());
     }
 
 }

@@ -2,26 +2,26 @@ package com.project.resiRed.service.admin;
 
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
+import com.project.resiRed.dto.SurveyDto.SurveyResponse;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
-import com.project.resiRed.dto.SurveyDto.currentSurveyResponse;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
-import com.project.resiRed.dto.SurveyDto.SurveysResponse;
+import com.project.resiRed.dto.SurveyDto.SurveysListResponse;
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
 import com.project.resiRed.dto.QuestionDto.questionResponse;
 import com.project.resiRed.dto.ChoiceDto.choiceResponse;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 
 
-import com.project.resiRed.repository.SurveyRepository;
-import com.project.resiRed.repository.QuestionRepository;
-import com.project.resiRed.repository.ChoiceRepository;
-import com.project.resiRed.repository.UserRepository;
+import com.project.resiRed.entity.Assembly;
+import com.project.resiRed.enums.AssemblyStatus;
+import com.project.resiRed.repository.*;
 
 import com.project.resiRed.entity.Survey;
 import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Choice;
 
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -29,9 +29,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collections;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +37,7 @@ public class SurveyServiceImpl implements SurveyService{
     private final SurveyRepository surveyRepository;
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
+    private final AssemblyRepository assemblyRepository;
     private final UserRepository userRepository;
 
     @Override
@@ -71,12 +70,12 @@ public class SurveyServiceImpl implements SurveyService{
     }
 
     @Override
-    public List<SurveysResponse> getAlLEditableSurveys() {
+    public List<SurveysListResponse> getAlLEditableSurveys() {
         List<Survey> allSurveys = surveyRepository.findAllEditable();
 
-        List<SurveysResponse> response = new ArrayList<SurveysResponse>();
+        List<SurveysListResponse> response = new ArrayList<SurveysListResponse>();
         for (Survey survey : allSurveys) {
-            response.add(SurveysResponse.builder()
+            response.add(SurveysListResponse.builder()
                     .surveyId(survey.getSurveyId())
                     .dateCreated(survey.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     .topic(survey.getTopic())
@@ -151,22 +150,38 @@ public class SurveyServiceImpl implements SurveyService{
         return new newQuestionResponse(question.getQuestionId(), "Question added to Survey");
     }
 
-
     @Override
-    public currentSurveyResponse checkNextSurvey(){
-        List<Long> survey_id = surveyRepository.findCurrentSurvey();
+    public List<SurveyResponse> getAllAssemblySurveys(){
+        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.STARTED).get();
+        List<Survey> allSurveys = surveyRepository.findAllByAssembly(assembly);
+        List<SurveyResponse> surveys = new ArrayList<SurveyResponse>();
+        for (Survey survey : allSurveys) {
+            List<questionResponse> questions = new ArrayList<questionResponse>();
+            for(Question question : survey.getQuestions()){
+                List<choiceResponse> choices = new ArrayList<choiceResponse>();
+                for(Choice choice : question.getChoices()){
+                    choices.add(choiceResponse.builder()
+                            .choiceId(choice.getChoiceId())
+                            .description(choice.getDescription())
+                            .build());
+                }
+                questions.add(questionResponse.builder()
+                        .questionId(question.getQuestionId())
+                        .description(question.getDescription())
+                        .choices(choices).build()
+                );
+            }
+            surveys.add(SurveyResponse.builder()
+                    .surveyId(survey.getSurveyId())
+                    .topic(survey.getTopic())
+                    .questions(questions)
+                    .build());
 
-        if(!survey_id.isEmpty()){
-            return currentSurveyResponse.builder()
-                    .id(survey_id.get(0))
-                    .isLastQuestion(Collections.frequency(survey_id, survey_id.get(0)) == 1)
-                    .isLastSurvey(false)
-                    .build();
         }
-        return currentSurveyResponse.builder()
-                .id(null)
-                .isLastQuestion(true)
-                .isLastSurvey(true)
-                .build();
+
+        return surveys;
     }
+
+
+
 }
