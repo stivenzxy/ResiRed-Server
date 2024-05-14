@@ -1,11 +1,10 @@
-package com.project.resiRed.controller.admin;
+package com.project.resiRed.controller;
 
 import com.project.resiRed.dto.AssemblyDto.*;
 import org.springframework.http.ResponseEntity;
-import com.project.resiRed.service.admin.AssemblyService;
+import com.project.resiRed.service.AssemblyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +48,7 @@ public class AssemblyController {
     }
 
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     @PutMapping("cancel/scheduled")
     public ResponseEntity<?> cancelScheduledAssembly(){
         return ResponseEntity.ok(assemblyService.cancelScheduledAssembly());

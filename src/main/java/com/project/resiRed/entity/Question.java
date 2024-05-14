@@ -24,6 +24,12 @@ public class Question {
     private Survey survey;
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Choice> choices;
+    @ManyToMany
+    @JoinTable(name = "votes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "question_id")
+    )
+    private List<User> users;
 
     public questionResponse getDto(){
         List<choiceResponse> choicesList = new ArrayList<choiceResponse>();

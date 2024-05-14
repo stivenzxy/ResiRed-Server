@@ -1,17 +1,14 @@
-package com.project.resiRed.controller.user;
+package com.project.resiRed.controller;
 
-import com.project.resiRed.dto.AuthDto.RegisterRequest;
 import com.project.resiRed.dto.UserDto;
 import com.project.resiRed.entity.User;
 import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

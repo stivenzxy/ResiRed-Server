@@ -1,11 +1,11 @@
-package com.project.resiRed.controller.admin;
+package com.project.resiRed.controller;
 
 
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 import com.project.resiRed.dto.ChoiceDto.newChoiceResponse;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
-import com.project.resiRed.service.admin.QuestionService;
+import com.project.resiRed.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

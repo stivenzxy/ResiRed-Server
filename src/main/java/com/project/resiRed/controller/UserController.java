@@ -1,4 +1,4 @@
-package com.project.resiRed.controller.user;
+package com.project.resiRed.controller;
 
 import com.project.resiRed.dto.UserDto;
 import com.project.resiRed.enums.UserRole;

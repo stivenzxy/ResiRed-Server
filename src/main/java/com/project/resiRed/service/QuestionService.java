@@ -1,4 +1,4 @@
-package com.project.resiRed.service.admin;
+package com.project.resiRed.service;
 
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 import com.project.resiRed.dto.ChoiceDto.newChoiceResponse;

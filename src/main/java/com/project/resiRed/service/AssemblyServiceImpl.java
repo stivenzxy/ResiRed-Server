@@ -1,4 +1,4 @@
-package com.project.resiRed.service.admin;
+package com.project.resiRed.service;
 
 
 import com.project.resiRed.dto.AssemblyDto.*;
@@ -7,31 +7,27 @@ import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.entity.Assembly;
 import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Survey;
-import com.project.resiRed.entity.User;
 import com.project.resiRed.enums.AssemblyStatus;
-import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.repository.AssemblyRepository;
 import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.repository.QuestionRepository;
 import com.project.resiRed.repository.UserRepository;
+import com.project.resiRed.service.AssemblyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.ls.LSException;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AssemblyServiceImpl implements AssemblyService{
+public class AssemblyServiceImpl implements AssemblyService {
     private final AssemblyRepository assemblyRepository;
     private final UserRepository userRepository;
     private  final SurveyRepository surveyRepository;

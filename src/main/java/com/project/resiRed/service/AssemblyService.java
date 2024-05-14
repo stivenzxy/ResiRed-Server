@@ -1,4 +1,4 @@
-package com.project.resiRed.service.admin;
+package com.project.resiRed.service;
 
 import com.project.resiRed.dto.AssemblyDto.*;
 import com.project.resiRed.dto.MessageDto;

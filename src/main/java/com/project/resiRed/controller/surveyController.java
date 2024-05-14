@@ -1,8 +1,8 @@
-package com.project.resiRed.controller.admin;
+package com.project.resiRed.controller;
 
 
 
-import com.project.resiRed.service.admin.SurveyService;
+import com.project.resiRed.service.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,4 +1,4 @@
-package com.project.resiRed.service.admin;
+package com.project.resiRed.service;
 import com.project.resiRed.dto.ChoiceDto.choiceResponse;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 import com.project.resiRed.dto.ChoiceDto.newChoiceResponse;
@@ -14,6 +14,7 @@ import com.project.resiRed.repository.ChoiceRepository;
 
 
 import com.project.resiRed.repository.SurveyRepository;
+import com.project.resiRed.service.QuestionService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +23,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class QuestionServiceImpl implements QuestionService{
+public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;

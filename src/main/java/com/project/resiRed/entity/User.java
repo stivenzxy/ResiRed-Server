@@ -46,6 +46,9 @@ public class User implements UserDetails {
     @ManyToMany(mappedBy = "users")
     private List<Assembly> assemblies;
 
+    @ManyToMany(mappedBy = "users")
+    private List<Question> questions;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,4 +1,4 @@
-package com.project.resiRed.service.admin;
+package com.project.resiRed.service;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.SurveyDto.SurveyResponse;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;

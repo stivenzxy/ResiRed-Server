@@ -1,4 +1,4 @@
-package com.project.resiRed.service.admin;
+package com.project.resiRed.service;
 
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.SurveyDto.SurveyResponse;
@@ -24,6 +24,7 @@ import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Choice;
 
 
+import com.project.resiRed.service.SurveyService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +36,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class SurveyServiceImpl implements SurveyService{
+public class SurveyServiceImpl implements SurveyService {
     private final SurveyRepository surveyRepository;
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
