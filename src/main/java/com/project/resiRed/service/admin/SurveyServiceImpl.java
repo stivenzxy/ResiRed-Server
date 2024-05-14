@@ -158,7 +158,7 @@ public class SurveyServiceImpl implements SurveyService{
 
     @Override
     public List<SurveyResponse> getAllAssemblySurveys(){
-        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED).get();
+        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.STARTED).get();
         List<Survey> allSurveys = surveyRepository.findAllByAssembly(assembly);
         List<SurveyResponse> surveys = new ArrayList<SurveyResponse>();
         for (Survey survey : allSurveys) {
