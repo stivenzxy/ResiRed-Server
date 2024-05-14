@@ -51,8 +51,8 @@ public class SurveyServiceImpl implements SurveyService{
         for (createQuestionRequest questionDto : request.getQuestions()) {
             Question question = new Question();
             question.setDescription(questionDto.getDescription());
-            question.setVoted(false);
             question.setSurvey(survey);
+            question.setCanBeVoted(false);
             question.setChoices(new ArrayList<>());
             for (createChoiceRequest choiceDto : questionDto.getChoices()) {
                 Choice choice = new Choice();
@@ -92,9 +92,9 @@ public class SurveyServiceImpl implements SurveyService{
 
         List<questionResponse> response = new ArrayList<questionResponse>();
 
-        for (Question question : questionRepository.findAllBySurvey(survey)) {
+        for (Question question : survey.getQuestions()) {
             List<choiceResponse> choices = new ArrayList<choiceResponse>();
-            for (Choice choice : choiceRepository.findAllByQuestion(question)) {
+            for (Choice choice : question.getChoices()) {
                 choices.add(choiceResponse.builder()
                         .choiceId(choice.getChoiceId())
                         .description(choice.getDescription()).build());
@@ -128,12 +128,12 @@ public class SurveyServiceImpl implements SurveyService{
     }
 
     @Override
-    public newQuestionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
+    public questionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
         Survey survey = surveyRepository.findById(surveyId).get();
         Question question = new Question();
         question.setDescription(request.getDescription());
-        question.setVoted(false);
         question.setSurvey(survey);
+        question.setCanBeVoted(false);
         question.setChoices(new ArrayList<>());
         for (createChoiceRequest choiceDto : request.getChoices()) {
             Choice choice = new Choice();
@@ -142,12 +142,10 @@ public class SurveyServiceImpl implements SurveyService{
             choice.setVotes(0);
             question.getChoices().add(choice);
         }
-        survey.getQuestions().add(question);
 
         questionRepository.saveAndFlush(question);
-        surveyRepository.save(survey);
 
-        return new newQuestionResponse(question.getQuestionId(), "Question added to Survey");
+        return question.getDto();
     }
 
     @Override

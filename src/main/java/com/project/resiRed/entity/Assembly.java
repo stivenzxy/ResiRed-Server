@@ -6,6 +6,7 @@ import com.project.resiRed.dto.AssemblyDto.createAssemblyRequest;
 import com.project.resiRed.enums.AssemblyStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ public class Assembly {
     private String description;
     private LocalDate date;
     private LocalTime startTime;
+    private LocalTime finishedTime;
     private LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
     private AssemblyStatus status;

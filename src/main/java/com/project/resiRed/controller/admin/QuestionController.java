@@ -48,4 +48,14 @@ public class QuestionController {
     public  ResponseEntity<newChoiceResponse> addChoiceToQuestion(@PathVariable Long id, @RequestBody createChoiceRequest request){
             return ResponseEntity.ok(questionService.addChoiceToQuestion(id, request));
     }
+
+    @PutMapping(value = "set/current/{id}")
+    public ResponseEntity<?> setCurrentQuestion(@PathVariable Long id){
+        return ResponseEntity.ok(questionService.setCurrentQuestion(id));
+    }
+    @GetMapping(value = "get/current")
+    public ResponseEntity<?> getCurrentQuestion(){
+        return ResponseEntity.ok(questionService.getCurrentQuestion());
+    }
+
 }

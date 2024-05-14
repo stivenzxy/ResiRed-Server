@@ -3,6 +3,7 @@ import com.project.resiRed.dto.ChoiceDto.choiceResponse;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 import com.project.resiRed.dto.ChoiceDto.newChoiceResponse;
 import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.QuestionDto.currentQuestionResponse;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
 import com.project.resiRed.entity.Choice;
 import com.project.resiRed.entity.Question;
@@ -14,8 +15,7 @@ import com.project.resiRed.repository.ChoiceRepository;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 
 @Service
@@ -72,4 +72,44 @@ public class QuestionServiceImpl implements QuestionService{
         choiceRepository.deleteById(choiceId);
         return MessageDto.builder().detail("Choice Deleted").build();
     }
+
+    @Override
+    public MessageDto setCurrentQuestion(Long questionId){
+        Optional<Question> lastQuestion = questionRepository.findByCanBeVoted(true);
+        lastQuestion.ifPresent(question -> question.setCanBeVoted(false));
+
+        Question question = questionRepository.findById(questionId).get();
+        question.setCanBeVoted(true);
+        questionRepository.save(question);
+
+        return MessageDto.builder()
+                .detail("Question Set to Vote")
+                .build();
+    }
+
+    @Override
+    public currentQuestionResponse getCurrentQuestion(){
+        Optional<Question> currentQuestion = questionRepository.findByCanBeVoted(true);
+        if(currentQuestion.isPresent()){
+            List<choiceResponse> choices = new ArrayList<choiceResponse>();
+            for(Choice choice : currentQuestion.get().getChoices()){
+                choices.add(choiceResponse.builder()
+                        .choiceId(choice.getChoiceId())
+                        .description(choice.getDescription())
+                        .build());
+            }
+
+            return currentQuestionResponse.builder()
+                    .topic(currentQuestion.get().getSurvey().getTopic())
+                    .questionId(currentQuestion.get().getQuestionId())
+                    .description(currentQuestion.get().getDescription())
+                    .choices(choices)
+                    .build();
+        }
+        return null;
+    }
+
+
+
+
 }

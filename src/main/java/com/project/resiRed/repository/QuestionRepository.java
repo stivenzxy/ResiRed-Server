@@ -22,4 +22,6 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
 
     @Query("SELECT q FROM Question q WHERE q.survey = :survey ORDER BY q.id ASC")
     List<Question> findAllBySurvey(Survey survey);
+
+    Optional<Question> findByCanBeVoted(boolean canBeVoted);
 }

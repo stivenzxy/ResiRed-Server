@@ -20,7 +20,7 @@ public interface SurveyService {
 
     MessageDto deleteSurvey(Long surveyId);
 
-    newQuestionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request);
+    questionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request);
 
     List<SurveyResponse> getAllAssemblySurveys();
 }

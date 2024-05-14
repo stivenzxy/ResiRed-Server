@@ -52,7 +52,7 @@ public class surveyController {
     }
 
     @PostMapping(value = "{id}/add/question")
-    public  ResponseEntity<newQuestionResponse> addQuestiontoSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request){
+    public  ResponseEntity<questionResponse> addQuestionToSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request){
             return ResponseEntity.ok(surveyService.addQuestiontoSurvey(id, request));
 
     }
@@ -61,6 +61,8 @@ public class surveyController {
     public ResponseEntity<?> getAllAssemblySurveys(){
         return ResponseEntity.ok(surveyService.getAllAssemblySurveys());
     }
+
+
 
 }
 
