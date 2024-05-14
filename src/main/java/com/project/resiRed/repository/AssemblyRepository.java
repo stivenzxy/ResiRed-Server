@@ -14,7 +14,9 @@ import java.util.Optional;
 @Repository
 public interface AssemblyRepository extends JpaRepository<Assembly,Long> {
 
-    List<Assembly> findByStatus(AssemblyStatus status);
+
+    Optional<Assembly> findByStatus(AssemblyStatus status);
+
 
     @Query("SELECT a FROM Assembly a WHERE a.status = 'FINISHED' or a.status = 'CANCELED'")
     List<Assembly> findAllHistory();

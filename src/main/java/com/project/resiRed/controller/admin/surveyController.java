@@ -1,8 +1,7 @@
 package com.project.resiRed.controller.admin;
 
 
-import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
-import com.project.resiRed.dto.SurveyDto.nextSurveyResponse;
+
 import com.project.resiRed.service.admin.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
-import com.project.resiRed.dto.SurveyDto.SurveysResponse;
+import com.project.resiRed.dto.SurveyDto.SurveysListResponse;
 import com.project.resiRed.dto.QuestionDto.questionResponse;
 
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
@@ -33,8 +32,9 @@ public class surveyController {
 
 
     @GetMapping(value = "list/edit")
-    public ResponseEntity<List<SurveysResponse>> getAlLSurveys() {
-        return ResponseEntity.ok(surveyService.getAlLEditableSurveys());
+
+    public  ResponseEntity<List<SurveysListResponse>> getAlLSurveys(){
+            return ResponseEntity.ok(surveyService.getAlLEditableSurveys());
     }
 
     @GetMapping(value = "{id}/list/questions")
@@ -53,24 +53,17 @@ public class surveyController {
     }
 
     @PostMapping(value = "{id}/add/question")
-    public ResponseEntity<newQuestionResponse> addQuestiontoSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request) {
-        return ResponseEntity.ok(surveyService.addQuestiontoSurvey(id, request));
+
+    public  ResponseEntity<questionResponse> addQuestionToSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request){
+            return ResponseEntity.ok(surveyService.addQuestiontoSurvey(id, request));
 
     }
 
+    @GetMapping(value = "list/voting")
+    public ResponseEntity<?> getAllAssemblySurveys(){
+        return ResponseEntity.ok(surveyService.getAllAssemblySurveys());
+    }
 
 }
 
 
-/*
-
-Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-
- */

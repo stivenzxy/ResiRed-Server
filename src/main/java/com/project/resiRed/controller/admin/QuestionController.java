@@ -4,23 +4,12 @@ package com.project.resiRed.controller.admin;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 import com.project.resiRed.dto.ChoiceDto.newChoiceResponse;
 import com.project.resiRed.dto.MessageDto;
-import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
-import com.project.resiRed.dto.QuestionDto.questionResponse;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
-import com.project.resiRed.dto.SurveyDto.nextSurveyResponse;
 import com.project.resiRed.service.admin.QuestionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 
 @RestController
 @RequestMapping("api/admin/question")
@@ -51,23 +40,14 @@ public class QuestionController {
             return ResponseEntity.ok(questionService.addChoiceToQuestion(id, request));
     }
 
-    @GetMapping(value = "first")
-    public ResponseEntity<questionResponse> getFirstQuestion(){
-        return ResponseEntity.ok(questionService.getFirstQuestion());
+    @PutMapping(value = "set/current/{id}")
+    public ResponseEntity<?> setCurrentQuestion(@PathVariable Long id){
+        return ResponseEntity.ok(questionService.setCurrentQuestion(id));
     }
+    @GetMapping(value = "get/current")
+    public ResponseEntity<?> getCurrentQuestion(){
 
-    @GetMapping(value = "next/{id}")
-    public ResponseEntity<questionResponse> getNextQuestion(@PathVariable Long id){
-        return ResponseEntity.ok(questionService.getNextQuestion(id));
-    }
-
-    @GetMapping(value = "current")
-    public ResponseEntity<questionResponse> getCurrentQuestion(){
         return ResponseEntity.ok(questionService.getCurrentQuestion());
     }
 
-    @PutMapping(value = "current/save/voting")
-    public ResponseEntity<nextSurveyResponse> saveVoting(){
-        return ResponseEntity.ok(questionService.saveVoting());
-    }
 }

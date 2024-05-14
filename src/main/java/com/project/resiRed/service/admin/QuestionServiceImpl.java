@@ -3,12 +3,12 @@ import com.project.resiRed.dto.ChoiceDto.choiceResponse;
 import com.project.resiRed.dto.ChoiceDto.createChoiceRequest;
 import com.project.resiRed.dto.ChoiceDto.newChoiceResponse;
 import com.project.resiRed.dto.MessageDto;
-import com.project.resiRed.dto.QuestionDto.questionResponse;
+
+import com.project.resiRed.dto.QuestionDto.currentQuestionResponse;
+
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
-import com.project.resiRed.dto.SurveyDto.nextSurveyResponse;
 import com.project.resiRed.entity.Choice;
 import com.project.resiRed.entity.Question;
-import com.project.resiRed.entity.Survey;
 import com.project.resiRed.repository.QuestionRepository;
 import com.project.resiRed.repository.ChoiceRepository;
 
@@ -77,73 +77,41 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public questionResponse getFirstQuestion() {
+    public MessageDto setCurrentQuestion(Long questionId){
+        Optional<Question> lastQuestion = questionRepository.findByCanBeVoted(true);
+        lastQuestion.ifPresent(question -> question.setCanBeVoted(false));
 
-            Question question = questionRepository.findAll().stream().findFirst().get();
-            question.setCanBeVoted(true);
-            questionRepository.save(question);
-            return question.getDto();
+        Question question = questionRepository.findById(questionId).get();
+        question.setCanBeVoted(true);
+        questionRepository.save(question);
+
+        return MessageDto.builder()
+                .detail("Question Set to Vote")
+                .build();
     }
 
     @Override
-    public questionResponse getNextQuestion(Long surveyId) {
-
-            List<Question> questions = questionRepository.findNextQuestion(surveyId);
-            if (!questions.isEmpty()) {
-                Optional<Question> addedQuestion = questionRepository.findByCanBeVoted(true);
-                if (addedQuestion.isPresent()) {
-                    return addedQuestion.get().getDto();
-                } else {
-                    Question question = questions.stream().findFirst().get();
-                    question.setCanBeVoted(true);
-                    questionRepository.save(question);
-                    return question.getDto();
-                }
+    public currentQuestionResponse getCurrentQuestion(){
+        Optional<Question> currentQuestion = questionRepository.findByCanBeVoted(true);
+        if(currentQuestion.isPresent()){
+            List<choiceResponse> choices = new ArrayList<choiceResponse>();
+            for(Choice choice : currentQuestion.get().getChoices()){
+                choices.add(choiceResponse.builder()
+                        .choiceId(choice.getChoiceId())
+                        .description(choice.getDescription())
+                        .build());
             }
+
+            return currentQuestionResponse.builder()
+                    .topic(currentQuestion.get().getSurvey().getTopic())
+                    .questionId(currentQuestion.get().getQuestionId())
+                    .description(currentQuestion.get().getDescription())
+                    .choices(choices)
+                    .build();
+        }
 
         return null;
     }
-
-
-
-        @Override
-        public questionResponse getCurrentQuestion(){
-            Optional<Question> question = questionRepository.findByCanBeVoted(true);
-            return question.map(Question::getDto).orElse(null);
-        }
-
-        @Override
-        public nextSurveyResponse saveVoting(){
-            Optional<Question> lastQuestion = questionRepository.findByCanBeVoted(true);
-            if(lastQuestion.isPresent()){
-                lastQuestion.get().setVoted(true);
-                lastQuestion.get().setCanBeVoted(false);
-                questionRepository.save(lastQuestion.get());
-            }
-
-
-            List<Long> surveys_id = surveyRepository.findNextSurvey();
-
-            if(!surveys_id.isEmpty()){
-            List<Question> questions = questionRepository.findBySurveyAndVoted(lastQuestion.get().getSurvey(), false);
-
-            Survey survey = surveyRepository.findById(surveys_id.get(0)).get();
-                return nextSurveyResponse.builder()
-                        .nextId(surveys_id.get(0))
-                        .nextTopic(survey.getTopic())
-                        .isLastQuestion(questions.isEmpty())
-                        .isLastSurvey(false)
-                        .build();
-
-            }
-            return nextSurveyResponse.builder()
-                    .isLastSurvey(true)
-                    .build();
-
-
-        }
-
-
 
 
 

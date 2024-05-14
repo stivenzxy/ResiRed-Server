@@ -21,12 +21,6 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
 
     List<Question> findAllBySurvey(Survey survey);
 
-
-    Optional<Question> findByCanBeVoted(Boolean canBeVoted);
-
-    List<Question> findBySurveyAndVoted(Survey survey, boolean voted);
-
-    @Query(value="select * from questions where survey_id=:survey and voted=false ORDER BY question_id ASC", nativeQuery = true)
-    List<Question> findNextQuestion(Long survey);
+    Optional<Question> findByCanBeVoted(boolean canBeVoted);
 
 }

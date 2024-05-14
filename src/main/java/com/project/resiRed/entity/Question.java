@@ -18,7 +18,6 @@ public class Question {
     @Column(name = "question_id")
     private Long questionId;
     private String description;
-    private Boolean voted;
     private Boolean canBeVoted;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="survey_id")
@@ -30,6 +29,7 @@ public class Question {
         List<choiceResponse> choicesList = new ArrayList<choiceResponse>();
         for (Choice choice : choices) {
             choicesList.add(choiceResponse.builder()
+
                     .choiceId(choice.getChoiceId())
                     .description(choice.getDescription()).build());
         }

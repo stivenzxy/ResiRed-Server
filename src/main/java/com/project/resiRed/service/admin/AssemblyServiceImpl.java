@@ -97,11 +97,11 @@ public class AssemblyServiceImpl implements AssemblyService{
 
     @Override
     public ScheduledAssemblyResponse checkScheduledAssembly() {
-        Optional<Assembly> assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED).stream().findFirst();
+        Optional<Assembly> assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED);
         if (assembly.isPresent()){
 
-            LocalDate date = assembly.get().getDate();
             LocalTime time = assembly.get().getStartTime();
+            LocalDate date = assembly.get().getDate();
 
             LocalDateTime dateTime = LocalDateTime.of(date.getYear(),
                     date.getMonthValue(), date.getDayOfMonth(),
@@ -123,7 +123,7 @@ public class AssemblyServiceImpl implements AssemblyService{
 
     @Override
     public MessageDto cancelScheduledAssembly(){
-        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED).stream().findFirst().get();
+        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED).get();
         assembly.setStatus(AssemblyStatus.CANCELED);
         assemblyRepository.save(assembly);
 
