@@ -14,10 +14,11 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/admin/assembly")
 @PreAuthorize("hasAuthority('ADMIN')")
+@RequestMapping("api/admin/assembly")
 public class AssemblyController {
     private final AssemblyService assemblyService;
+
     @PostMapping("create")
     public ResponseEntity<?> createAssembly(@RequestBody createAssemblyRequest request){
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -46,7 +47,6 @@ public class AssemblyController {
         public ResponseEntity<?> checkScheduledAssembly(){
         return ResponseEntity.ok(assemblyService.checkScheduledAssembly());
     }
-
 
 
     @PutMapping("cancel/scheduled")

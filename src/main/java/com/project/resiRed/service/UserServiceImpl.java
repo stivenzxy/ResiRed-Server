@@ -1,4 +1,4 @@
-package com.project.resiRed.controller;
+package com.project.resiRed.service;
 
 import com.project.resiRed.dto.UserDto;
 import com.project.resiRed.entity.User;
@@ -12,9 +12,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
+    @Override
     public List<UserDto> getUsersByRole(UserRole role) {
         List<User> users = userRepository.findByRole(role);
         List<UserDto> userDtos = new ArrayList<>();

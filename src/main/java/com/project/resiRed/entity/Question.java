@@ -8,6 +8,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -24,12 +25,12 @@ public class Question {
     private Survey survey;
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Choice> choices;
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(name = "votes",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "question_id")
+            joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> users;
+    private Set<User> users;
 
     public questionResponse getDto(){
         List<choiceResponse> choicesList = new ArrayList<choiceResponse>();

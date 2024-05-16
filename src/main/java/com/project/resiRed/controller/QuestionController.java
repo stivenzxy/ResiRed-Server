@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import com.project.resiRed.service.authentication.JwtService;
 
 @RestController
 @RequestMapping("api/admin/question")
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class QuestionController {
     private final QuestionService questionService;
+    private final JwtService jwtService;
+
 
     @PutMapping(value = "{id}/update")
     public ResponseEntity<MessageDto> updateSurveyQuestion(@PathVariable Long id, @RequestBody updateQuestionRequest request){
@@ -44,10 +47,23 @@ public class QuestionController {
     public ResponseEntity<?> setCurrentQuestion(@PathVariable Long id){
         return ResponseEntity.ok(questionService.setCurrentQuestion(id));
     }
+
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('OWNER')")
     @GetMapping(value = "get/current")
     public ResponseEntity<?> getCurrentQuestion(){
 
         return ResponseEntity.ok(questionService.getCurrentQuestion());
     }
+
+    @PreAuthorize("hasAuthority('OWNER')")
+    @PostMapping(value = "{questionId}/vote/{choiceId}")
+    public ResponseEntity<?> voteQuestion(@PathVariable Long questionId, @PathVariable Long choiceId,@RequestHeader("Authorization") String authorizationHeader){
+
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        String email = jwtService.getEmailFromToken(jwtToken);
+        System.out.println(questionId + "  " + choiceId + "  " + email) ;
+        return ResponseEntity.ok(questionService.voteQuestion(questionId, choiceId, email));
+    }
+
 
 }

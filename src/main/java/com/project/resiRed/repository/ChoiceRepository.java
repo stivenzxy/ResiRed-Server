@@ -9,8 +9,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ChoiceRepository extends JpaRepository<Choice,Long> {
-   // List<Choice> findByQuestion(Question question);
+
 }

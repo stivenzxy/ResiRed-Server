@@ -9,15 +9,19 @@ import com.project.resiRed.dto.QuestionDto.currentQuestionResponse;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
 import com.project.resiRed.entity.Choice;
 import com.project.resiRed.entity.Question;
+import com.project.resiRed.entity.User;
 import com.project.resiRed.repository.QuestionRepository;
 import com.project.resiRed.repository.ChoiceRepository;
+import com.project.resiRed.repository.UserRepository;
 
 
 import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.service.QuestionService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 
 
@@ -28,6 +32,7 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
     private final SurveyRepository surveyRepository;
+    private final UserRepository userRepository;
 
     @Override
     public MessageDto updateSurveyQuestion(Long questionId, updateQuestionRequest request){
@@ -113,6 +118,36 @@ public class QuestionServiceImpl implements QuestionService {
 
         return null;
     }
+
+    @Override
+    public boolean isAlreadyVoted(Long questionId, Long userId){
+        return questionRepository.findByQuestionIdAndUserId(questionId, userId).isPresent();
+    }
+
+
+    @Override
+    @Transactional
+    public MessageDto voteQuestion(Long questionId, Long choiceId, String email) {
+
+        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if(isAlreadyVoted(questionId, user.getUserId())){
+            return MessageDto.builder().detail("Question cannot be voted twice").build();
+        }
+
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new RuntimeException("Question not found"));
+        Choice choice = choiceRepository.findById(choiceId).orElseThrow(() -> new RuntimeException("Choice not found"));
+        choice.setVotes(choice.getVotes() + 1);
+
+        question.getUsers().add(user);
+
+        questionRepository.save(question);
+
+
+        return MessageDto.builder().detail("Question Voted").build();
+    }
+
+
 
 
 

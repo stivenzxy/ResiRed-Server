@@ -1,4 +1,4 @@
-package com.project.resiRed.service;
+package com.project.resiRed.service.authentication;
 
 import com.project.resiRed.dto.AuthDto.AuthResponse;
 import com.project.resiRed.dto.AuthDto.LoginRequest;
@@ -6,12 +6,12 @@ import com.project.resiRed.dto.AuthDto.RegisterRequest;
 import com.project.resiRed.entity.User;
 import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.repository.UserRepository;
+import com.project.resiRed.service.authentication.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Service
 @RequiredArgsConstructor

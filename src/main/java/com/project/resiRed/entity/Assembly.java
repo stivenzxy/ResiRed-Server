@@ -37,8 +37,8 @@ public class Assembly {
 
     @ManyToMany
     @JoinTable(name = "attendance",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "assembly_id")
+            joinColumns = @JoinColumn(name = "assembly_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> users;
 

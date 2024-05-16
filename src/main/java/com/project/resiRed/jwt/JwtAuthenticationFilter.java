@@ -1,6 +1,6 @@
 package com.project.resiRed.jwt;
 
-import com.project.resiRed.service.JwtService;
+import com.project.resiRed.service.authentication.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.project.resiRed.service;
+package com.project.resiRed.service.authentication;
 
 import com.project.resiRed.entity.RefreshToken;
 import com.project.resiRed.entity.User;
