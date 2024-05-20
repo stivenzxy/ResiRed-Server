@@ -7,6 +7,7 @@ import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
 import com.project.resiRed.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,7 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.setCurrentQuestion(id));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('OWNER')")
+    @PreAuthorize("hasAuthority('OWNER')")
     @GetMapping(value = "get/current")
     public ResponseEntity<?> getCurrentQuestion(){
 
@@ -58,10 +59,8 @@ public class QuestionController {
     @PreAuthorize("hasAuthority('OWNER')")
     @PostMapping(value = "{questionId}/vote/{choiceId}")
     public ResponseEntity<?> voteQuestion(@PathVariable Long questionId, @PathVariable Long choiceId,@RequestHeader("Authorization") String authorizationHeader){
-
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String email = jwtService.getEmailFromToken(jwtToken);
-        System.out.println(questionId + "  " + choiceId + "  " + email) ;
         return ResponseEntity.ok(questionService.voteQuestion(questionId, choiceId, email));
     }
 

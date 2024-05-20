@@ -120,7 +120,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public boolean isAlreadyVoted(Long questionId, Long userId){
+    public boolean isQuestionAlreadyVoted(Long questionId, Long userId){
         return questionRepository.findByQuestionIdAndUserId(questionId, userId).isPresent();
     }
 
@@ -129,14 +129,14 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional
     public MessageDto voteQuestion(Long questionId, Long choiceId, String email) {
 
-        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findUserByEmail(email).get();
 
-        if(isAlreadyVoted(questionId, user.getUserId())){
+        if(isQuestionAlreadyVoted(questionId, user.getUserId())){
             return MessageDto.builder().detail("Question cannot be voted twice").build();
         }
 
-        Question question = questionRepository.findById(questionId).orElseThrow(() -> new RuntimeException("Question not found"));
-        Choice choice = choiceRepository.findById(choiceId).orElseThrow(() -> new RuntimeException("Choice not found"));
+        Question question = questionRepository.findById(questionId).get();
+        Choice choice = choiceRepository.findById(choiceId).get();
         choice.setVotes(choice.getVotes() + 1);
 
         question.getUsers().add(user);

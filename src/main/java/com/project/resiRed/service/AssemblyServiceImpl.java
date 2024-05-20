@@ -10,6 +10,7 @@ import com.project.resiRed.dto.SurveyDto.surveysOverviewResponse;
 import com.project.resiRed.entity.Assembly;
 import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Survey;
+import com.project.resiRed.entity.User;
 import com.project.resiRed.enums.AssemblyStatus;
 import com.project.resiRed.repository.AssemblyRepository;
 import com.project.resiRed.repository.SurveyRepository;
@@ -94,23 +95,27 @@ public class AssemblyServiceImpl implements AssemblyService {
     }
 
     @Override
+    public boolean IsAssemblyAvailable(Assembly assembly){
+        LocalTime time = assembly.getStartTime();
+        LocalDate date = assembly.getDate();
+
+        LocalDateTime dateTime = LocalDateTime.of(date.getYear(),
+                date.getMonthValue(), date.getDayOfMonth(),
+                time.getHour(), time.getMinute(), time.getSecond());
+
+        return LocalDateTime.now().isAfter(dateTime);
+    }
+
+    @Override
     public ScheduledAssemblyResponse checkScheduledAssembly() {
         Optional<Assembly> assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED);
         if (assembly.isPresent()){
-
-            LocalTime time = assembly.get().getStartTime();
-            LocalDate date = assembly.get().getDate();
-
-            LocalDateTime dateTime = LocalDateTime.of(date.getYear(),
-                    date.getMonthValue(), date.getDayOfMonth(),
-                    time.getHour(), time.getMinute(), time.getSecond());
-
             return ScheduledAssemblyResponse.builder()
                     .isScheduled(true)
                     .title(assembly.get().getTitle())
                     .date(assembly.get().getDate())
                     .startTime(assembly.get().getStartTime())
-                    .isAvailable(LocalDateTime.now().isAfter(dateTime))
+                    .isAvailable(IsAssemblyAvailable(assembly.get()))
                     .build();
         } else{
             return ScheduledAssemblyResponse.builder()
@@ -135,6 +140,18 @@ public class AssemblyServiceImpl implements AssemblyService {
         return MessageDto.builder()
                 .detail("Assembly canceled")
                 .build();
+    }
+
+    @Override
+    public void addAttendee(String email){
+        User user = userRepository.findUserByEmail(email).get();
+        Optional<Assembly> assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED);
+        if (assembly.isPresent()) {
+            if(IsAssemblyAvailable(assembly.get())){
+                assembly.get().getUsers().add(user);
+                assemblyRepository.save(assembly.get());
+            }
+        }
     }
 
     @Override

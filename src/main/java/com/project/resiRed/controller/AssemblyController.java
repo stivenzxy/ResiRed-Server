@@ -2,6 +2,7 @@ package com.project.resiRed.controller;
 
 import com.project.resiRed.dto.AssemblyDto.*;
 import com.project.resiRed.dto.SurveyDto.surveysOverviewRequest;
+import com.project.resiRed.service.authentication.JwtService;
 import org.springframework.http.ResponseEntity;
 import com.project.resiRed.service.AssemblyService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ import java.util.List;
 @RequestMapping("api/admin/assembly")
 public class AssemblyController {
     private final AssemblyService assemblyService;
+    private final JwtService jwtService;
+
 
     @PostMapping("create")
     public ResponseEntity<?> createAssembly(@RequestBody createAssemblyRequest request){
@@ -58,6 +61,17 @@ public class AssemblyController {
     @PutMapping("finish/started")
     public ResponseEntity<?> finishAssembly(){
         return ResponseEntity.ok(assemblyService.finishAssembly());
+    }
+
+
+    // Esto luego se quita
+    @PreAuthorize("hasAuthority('OWNER')")
+    @PostMapping("add/attendee")
+    public ResponseEntity<Void> addAttendee(@RequestHeader("Authorization") String authorizationHeader){
+        String jwtToken = authorizationHeader.replace("Bearer ", "");
+        String email = jwtService.getEmailFromToken(jwtToken);
+        assemblyService.addAttendee(email);
+        return ResponseEntity.ok().build();
     }
 
 

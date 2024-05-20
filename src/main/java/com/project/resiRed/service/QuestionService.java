@@ -24,7 +24,7 @@ public interface QuestionService {
 
     currentQuestionResponse getCurrentQuestion();
 
-    boolean isAlreadyVoted(Long questionId, Long userId);
+    boolean isQuestionAlreadyVoted(Long questionId, Long userId);
     MessageDto voteQuestion(Long questionId, Long choiceId, String email);
 
 }

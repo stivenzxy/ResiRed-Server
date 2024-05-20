@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -37,7 +38,7 @@ public class Assembly {
             joinColumns = @JoinColumn(name = "assembly_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> users;
+    private Set<User> users;
 
     public AssemblyResponse getDto() {
         AssemblyResponse assemblyResponse = new AssemblyResponse();
