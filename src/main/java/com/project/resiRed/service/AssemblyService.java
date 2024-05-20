@@ -2,8 +2,8 @@ package com.project.resiRed.service;
 
 import com.project.resiRed.dto.AssemblyDto.*;
 import com.project.resiRed.dto.MessageDto;
-
-import java.util.List;
+import com.project.resiRed.dto.SurveyDto.surveysOverviewRequest;
+import com.project.resiRed.dto.SurveyDto.surveysOverviewResponse;
 
 import java.util.List;
 
@@ -20,6 +20,8 @@ public interface AssemblyService {
     ScheduledAssemblyResponse checkScheduledAssembly();
 
     MessageDto cancelScheduledAssembly();
+
+    MessageDto finishAssembly();
 
 
 

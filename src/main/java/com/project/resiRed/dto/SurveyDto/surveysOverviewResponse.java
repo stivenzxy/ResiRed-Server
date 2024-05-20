@@ -1,7 +1,6 @@
-package com.project.resiRed.dto.AssemblyDto;
+package com.project.resiRed.dto.SurveyDto;
 
 
-import com.project.resiRed.dto.AssemblyDto.questionOverviewResponse;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

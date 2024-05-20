@@ -2,6 +2,7 @@ package com.project.resiRed.controller;
 
 
 
+import com.project.resiRed.dto.QuestionDto.questionResult;
 import com.project.resiRed.service.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class surveyController {
     @PostMapping(value = "{id}/add/question")
 
     public  ResponseEntity<questionResponse> addQuestionToSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request){
-            return ResponseEntity.ok(surveyService.addQuestiontoSurvey(id, request));
+            return ResponseEntity.ok(surveyService.addQuestionToSurvey(id, request));
 
     }
 
@@ -64,6 +65,10 @@ public class surveyController {
         return ResponseEntity.ok(surveyService.getAllAssemblySurveys());
     }
 
+    @GetMapping(value = "{id}/list/questions/results")
+    public ResponseEntity<List<questionResult>> getSurveyResults(@PathVariable Long id) {
+        return ResponseEntity.ok(surveyService.getSurveyResults(id));
+    }
 }
 
 

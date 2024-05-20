@@ -1,4 +1,4 @@
-package com.project.resiRed.dto.AssemblyDto;
+package com.project.resiRed.dto.ChoiceDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SurveyOverview {
-    private Long id;
-    private String topic;
+public class choiceResult {
+    private String description;
+    private int votes;
 }

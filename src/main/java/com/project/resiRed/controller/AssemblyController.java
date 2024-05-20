@@ -1,6 +1,7 @@
 package com.project.resiRed.controller;
 
 import com.project.resiRed.dto.AssemblyDto.*;
+import com.project.resiRed.dto.SurveyDto.surveysOverviewRequest;
 import org.springframework.http.ResponseEntity;
 import com.project.resiRed.service.AssemblyService;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,11 @@ public class AssemblyController {
     @PutMapping("cancel/scheduled")
     public ResponseEntity<?> cancelScheduledAssembly(){
         return ResponseEntity.ok(assemblyService.cancelScheduledAssembly());
+    }
+
+    @PutMapping("finish/started")
+    public ResponseEntity<?> finishAssembly(){
+        return ResponseEntity.ok(assemblyService.finishAssembly());
     }
 
 

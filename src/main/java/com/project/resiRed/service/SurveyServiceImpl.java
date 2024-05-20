@@ -1,6 +1,8 @@
 package com.project.resiRed.service;
 
+import com.project.resiRed.dto.ChoiceDto.choiceResult;
 import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.QuestionDto.questionResult;
 import com.project.resiRed.dto.SurveyDto.SurveyResponse;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 
@@ -24,7 +26,6 @@ import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Choice;
 
 
-import com.project.resiRed.service.SurveyService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -116,25 +117,25 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-   public MessageDto updateSurveyTopic(Long surveyId, updateTopicRequest request){
+    public MessageDto updateSurveyTopic(Long surveyId, updateTopicRequest request) {
         Survey survey = surveyRepository.findById(surveyId).get();
-       if(Objects.nonNull(request.getTopic()) && !"".equalsIgnoreCase(request.getTopic())){
-           survey.setTopic(request.getTopic());
-       }
-       surveyRepository.save(survey);
+        if (Objects.nonNull(request.getTopic()) && !"".equalsIgnoreCase(request.getTopic())) {
+            survey.setTopic(request.getTopic());
+        }
+        surveyRepository.save(survey);
 
-       return MessageDto.builder().detail("Topic Name Updated").build();
+        return MessageDto.builder().detail("Topic Name Updated").build();
 
-   }
-
-    @Override
-    public MessageDto deleteSurvey(Long surveyId){
-            surveyRepository.deleteById(surveyId);
-            return MessageDto.builder().detail("Survey Deleted").build();
     }
 
     @Override
-    public questionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
+    public MessageDto deleteSurvey(Long surveyId) {
+        surveyRepository.deleteById(surveyId);
+        return MessageDto.builder().detail("Survey Deleted").build();
+    }
+
+    @Override
+    public questionResponse addQuestionToSurvey(Long surveyId, createQuestionRequest request) {
         Survey survey = surveyRepository.findById(surveyId).get();
 
         Question question = new Question();
@@ -158,15 +159,15 @@ public class SurveyServiceImpl implements SurveyService {
 
 
     @Override
-    public List<SurveyResponse> getAllAssemblySurveys(){
+    public List<SurveyResponse> getAllAssemblySurveys() {
         Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.STARTED).get();
         List<Survey> allSurveys = surveyRepository.findAllByAssembly(assembly);
         List<SurveyResponse> surveys = new ArrayList<SurveyResponse>();
         for (Survey survey : allSurveys) {
             List<questionResponse> questions = new ArrayList<questionResponse>();
-            for(Question question : survey.getQuestions()){
+            for (Question question : survey.getQuestions()) {
                 List<choiceResponse> choices = new ArrayList<choiceResponse>();
-                for(Choice choice : question.getChoices()){
+                for (Choice choice : question.getChoices()) {
                     choices.add(choiceResponse.builder()
                             .choiceId(choice.getChoiceId())
                             .description(choice.getDescription())
@@ -187,6 +188,28 @@ public class SurveyServiceImpl implements SurveyService {
         }
 
         return surveys;
+    }
+
+    @Override
+    public List<questionResult> getSurveyResults(Long surveyId){
+        Survey survey = surveyRepository.findById(surveyId).get();
+        List<questionResult> response = new ArrayList<questionResult>();
+
+        for (Question question : survey.getQuestions()) {
+            List<choiceResult> choices = new ArrayList<choiceResult>();
+            for (Choice choice : question.getChoices()) {
+                choices.add(choiceResult.builder()
+                        .description(choice.getDescription())
+                        .votes(choice.getVotes())
+                        .build());
+            }
+            response.add(questionResult.builder()
+                    .description(question.getDescription())
+                    .choices(choices).build()
+            );
+        }
+
+        return response;
     }
 
 

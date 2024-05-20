@@ -1,5 +1,6 @@
 package com.project.resiRed.service;
 import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.QuestionDto.questionResult;
 import com.project.resiRed.dto.SurveyDto.SurveyResponse;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 
@@ -20,9 +21,12 @@ public interface SurveyService {
 
     MessageDto deleteSurvey(Long surveyId);
 
-    questionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request);
+    questionResponse addQuestionToSurvey(Long surveyId, createQuestionRequest request);
 
 
     List<SurveyResponse> getAllAssemblySurveys();
+
+    List<questionResult> getSurveyResults(Long surveyId);
+
 
 }

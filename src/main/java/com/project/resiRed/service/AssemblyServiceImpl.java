@@ -4,6 +4,9 @@ package com.project.resiRed.service;
 import com.project.resiRed.dto.AssemblyDto.*;
 
 import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.SurveyDto.questionOverviewResponse;
+import com.project.resiRed.dto.SurveyDto.surveysOverviewRequest;
+import com.project.resiRed.dto.SurveyDto.surveysOverviewResponse;
 import com.project.resiRed.entity.Assembly;
 import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Survey;
@@ -12,7 +15,6 @@ import com.project.resiRed.repository.AssemblyRepository;
 import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.repository.QuestionRepository;
 import com.project.resiRed.repository.UserRepository;
-import com.project.resiRed.service.AssemblyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -84,11 +86,11 @@ public class AssemblyServiceImpl implements AssemblyService {
     @Override
     public List<AssemblyResponse> getAllAssembliesHistory() {
         List<Assembly> assemblies = assemblyRepository.findAllHistory();
-        List<AssemblyResponse> respondAssemblies = new ArrayList<>();
+        List<AssemblyResponse> responseAssemblies = new ArrayList<>();
         for (Assembly assembly : assemblies) {
-            respondAssemblies.add(assembly.getDto());
+            responseAssemblies.add(assembly.getDto());
         }
-        return respondAssemblies;
+        return responseAssemblies;
     }
 
     @Override
@@ -132,6 +134,17 @@ public class AssemblyServiceImpl implements AssemblyService {
 
         return MessageDto.builder()
                 .detail("Assembly canceled")
+                .build();
+    }
+
+    @Override
+    public MessageDto finishAssembly(){
+        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.STARTED).get();
+        assembly.setStatus(AssemblyStatus.FINISHED);
+        assemblyRepository.save(assembly);
+
+        return MessageDto.builder()
+                .detail("Assembly finished")
                 .build();
     }
 
