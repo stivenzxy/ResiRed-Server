@@ -3,6 +3,7 @@ package com.project.resiRed.entity;
 import com.project.resiRed.dto.AssemblyDto.AssemblyResponse;
 import com.project.resiRed.dto.SurveyDto.SurveysListResponse;
 import com.project.resiRed.enums.AssemblyStatus;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -28,10 +29,13 @@ public class Assembly {
     private LocalTime startTime;
     private LocalTime finishedTime;
     private LocalDateTime createdAt;
+    @Nullable
+    private Integer passcode;
     @Enumerated(EnumType.STRING)
     private AssemblyStatus status;
     @OneToMany(mappedBy = "assembly", cascade = CascadeType.ALL)
     private List<Survey> surveys;
+
 
     @ManyToMany
     @JoinTable(name = "attendance",

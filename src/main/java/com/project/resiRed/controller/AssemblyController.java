@@ -30,11 +30,6 @@ public class AssemblyController {
         );
     }
 
-    @GetMapping("surveys/overview")
-    public ResponseEntity<?> getSurveysOverview(@RequestBody surveysOverviewRequest request){
-        return ResponseEntity.ok(assemblyService.getSurveysOverview(request));
-    }
-
     @DeleteMapping("delete/{assemblyId}")
     public  ResponseEntity<?> deleteAssembly(@PathVariable Long assemblyId){
         return ResponseEntity.ok(assemblyService.deleteAssembly(assemblyId));
@@ -52,27 +47,45 @@ public class AssemblyController {
         return ResponseEntity.ok(assemblyService.checkScheduledAssembly());
     }
 
-
-    @PutMapping("cancel/scheduled")
-    public ResponseEntity<?> cancelScheduledAssembly(){
-        return ResponseEntity.ok(assemblyService.cancelScheduledAssembly());
-    }
-
-    @PutMapping("finish/started")
-    public ResponseEntity<?> finishAssembly(){
-        return ResponseEntity.ok(assemblyService.finishAssembly());
+    @GetMapping("generate/passcode/{assemblyId}")
+    public ResponseEntity<?> generateCode(@PathVariable Long assemblyId){
+        return ResponseEntity.ok(assemblyService.generateCode(assemblyId));
     }
 
 
-    // Esto luego se quita
+    @PutMapping("cancel/{assemblyId}")
+    public ResponseEntity<?> cancelAssembly(@PathVariable Long assemblyId){
+        return ResponseEntity.ok(assemblyService.cancelAssembly(assemblyId));
+    }
+
+    @PutMapping("finish/{assemblyId}")
+    public ResponseEntity<?> finishAssembly(@PathVariable Long assemblyId){
+        return ResponseEntity.ok(assemblyService.finishAssembly(assemblyId));
+    }
+
     @PreAuthorize("hasAuthority('OWNER')")
-    @PostMapping("add/attendee")
-    public ResponseEntity<Void> addAttendee(@RequestHeader("Authorization") String authorizationHeader){
+    @GetMapping("status/{assemblyId}")
+    public ResponseEntity<String> getAssemblyStatus(@PathVariable Long assemblyId){
+        return ResponseEntity.ok(assemblyService.getAssemblyStatus(assemblyId));
+    }
+
+
+
+    @PreAuthorize("hasAuthority('OWNER')")
+    @PostMapping("join/{assemblyId}/{passcode}")
+    public ResponseEntity<?> joinAssembly(@PathVariable Long assemblyId, @PathVariable int passcode, @RequestHeader("Authorization") String authorizationHeader){
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String email = jwtService.getEmailFromToken(jwtToken);
-        assemblyService.addAttendee(email);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(assemblyService.joinAssembly(assemblyId,passcode, email));
     }
+
+    @PutMapping("start/{assemblyId}")
+    public ResponseEntity<?> startAssembly(@PathVariable Long assemblyId){
+        return ResponseEntity.ok(assemblyService.startAssembly(assemblyId));
+    }
+
+
+
 
 
 

@@ -12,10 +12,12 @@ import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.Survey;
 import com.project.resiRed.entity.User;
 import com.project.resiRed.enums.AssemblyStatus;
+import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.repository.AssemblyRepository;
 import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.repository.QuestionRepository;
 import com.project.resiRed.repository.UserRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -55,26 +58,6 @@ public class AssemblyServiceImpl implements AssemblyService {
         return MessageDto.builder().detail("Assembly Created").build();
     }
 
-    @Override
-    public List<surveysOverviewResponse> getSurveysOverview(surveysOverviewRequest request){
-
-        List<surveysOverviewResponse> response = new ArrayList<surveysOverviewResponse>();
-
-        for(Survey survey : surveyRepository.findAllById(request.getSurveys())){
-            List<questionOverviewResponse> questions = new ArrayList<questionOverviewResponse>();
-            for(Question question : survey.getQuestions()){
-                questions.add(questionOverviewResponse.builder()
-                        .description(question.getDescription())
-                        .build());
-            }
-            response.add(surveysOverviewResponse.builder()
-                    .topic(survey.getTopic())
-                    .questions(questions)
-                    .build());
-        }
-
-        return response;
-    }
 
     @Override
     public MessageDto deleteAssembly(Long assemblyId) {
@@ -112,6 +95,7 @@ public class AssemblyServiceImpl implements AssemblyService {
         if (assembly.isPresent()){
             return ScheduledAssemblyResponse.builder()
                     .isScheduled(true)
+                    .assemblyId(assembly.get().getAssemblyId())
                     .title(assembly.get().getTitle())
                     .date(assembly.get().getDate())
                     .startTime(assembly.get().getStartTime())
@@ -125,8 +109,8 @@ public class AssemblyServiceImpl implements AssemblyService {
     }
 
     @Override
-    public MessageDto cancelScheduledAssembly(){
-        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED).get();
+    public MessageDto cancelAssembly(Long assemblyId){
+        Assembly assembly = assemblyRepository.findById(assemblyId).get();
         assembly.setStatus(AssemblyStatus.CANCELED);
         assemblyRepository.save(assembly);
 
@@ -143,9 +127,40 @@ public class AssemblyServiceImpl implements AssemblyService {
     }
 
     @Override
-    public void addAttendee(String email){
-        User user = userRepository.findUserByEmail(email).get();
-        Optional<Assembly> assembly = assemblyRepository.findByStatus(AssemblyStatus.SCHEDULED);
+    public Integer generateCode(Long assemblyId){
+        Optional<Assembly> assembly = assemblyRepository.findById(assemblyId);
+        if(assembly.isPresent()) {
+            if(IsAssemblyAvailable(assembly.get())) {
+                Random random = new Random();
+                Integer code = 100000 + random.nextInt(900000);
+                assembly.get().setPasscode(code);
+                assemblyRepository.save(assembly.get());
+                return code;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getAssemblyStatus(Long assemblyId){
+        Assembly assembly = assemblyRepository.findById(assemblyId).get();
+        return assembly.getStatus().name();
+    }
+
+    @Override
+    public boolean validateCode(Long assemblyId, int passcode){
+        Optional<Assembly> assembly = assemblyRepository.findById(assemblyId);
+        if(assembly.isPresent()) {
+            if (IsAssemblyAvailable(assembly.get())) {
+                return assembly.get().getPasscode() == passcode;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void addAttendee(Long assemblyId, User user){
+        Optional<Assembly> assembly = assemblyRepository.findById(assemblyId);
         if (assembly.isPresent()) {
             if(IsAssemblyAvailable(assembly.get())){
                 assembly.get().getUsers().add(user);
@@ -155,10 +170,54 @@ public class AssemblyServiceImpl implements AssemblyService {
     }
 
     @Override
-    public MessageDto finishAssembly(){
-        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.STARTED).get();
+    public MessageDto joinAssembly(Long assemblyId, int passcode, String email){
+        User user = userRepository.findUserByEmail(email).get();
+        if(validateCode(assemblyId, passcode)){
+            addAttendee(assemblyId, user);
+            return MessageDto.builder()
+                    .detail("User joined successfully")
+                    .build();
+        }
+        return MessageDto.builder()
+                .detail("Wrong passcode")
+                .build();
+    }
+
+    @Override
+    public boolean validateAttendees(Assembly assembly){
+            int totalUsers = userRepository.findByRole(UserRole.OWNER).size();
+            int totalAttendees = assembly.getUsers().size();
+            return totalAttendees > (totalUsers * 0.5);
+    }
+
+    @Override
+    public MessageDto startAssembly(Long assemblyId){
+        Optional<Assembly> assembly = assemblyRepository.findById(assemblyId);
+        if(assembly.isPresent()){
+            if(validateAttendees(assembly.get())){
+                assembly.get().setStatus(AssemblyStatus.STARTED);
+                assemblyRepository.save(assembly.get());
+                return MessageDto.builder()
+                        .detail("Assembly successfully started")
+                        .build();
+            }
+            return MessageDto.builder().
+                    detail("Insufficient number of attendees")
+                    .build();
+        }
+        return null;
+    }
+
+    @Override
+    public MessageDto finishAssembly(Long assemblyId){
+
+        Optional<Question> lastQuestion = questionRepository.findByCanBeVoted(true);
+        lastQuestion.ifPresent(question -> question.setCanBeVoted(false));
+
+        Assembly assembly = assemblyRepository.findById(assemblyId).get();
         assembly.setStatus(AssemblyStatus.FINISHED);
         assemblyRepository.save(assembly);
+
 
         return MessageDto.builder()
                 .detail("Assembly finished")

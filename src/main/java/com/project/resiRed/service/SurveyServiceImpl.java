@@ -3,11 +3,8 @@ package com.project.resiRed.service;
 import com.project.resiRed.dto.ChoiceDto.choiceResult;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.questionResult;
-import com.project.resiRed.dto.SurveyDto.SurveyResponse;
-import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
+import com.project.resiRed.dto.SurveyDto.*;
 
-import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
-import com.project.resiRed.dto.SurveyDto.SurveysListResponse;
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
 import com.project.resiRed.dto.QuestionDto.questionResponse;
 import com.project.resiRed.dto.ChoiceDto.choiceResponse;
@@ -159,8 +156,30 @@ public class SurveyServiceImpl implements SurveyService {
 
 
     @Override
-    public List<SurveyResponse> getAllAssemblySurveys() {
-        Assembly assembly = assemblyRepository.findByStatus(AssemblyStatus.STARTED).get();
+    public List<surveysOverviewResponse> getSurveysOverview(surveysOverviewRequest request){
+
+        List<surveysOverviewResponse> response = new ArrayList<surveysOverviewResponse>();
+
+        for(Survey survey : surveyRepository.findAllById(request.getSurveys())){
+            List<questionOverviewResponse> questions = new ArrayList<questionOverviewResponse>();
+            for(Question question : survey.getQuestions()){
+                questions.add(questionOverviewResponse.builder()
+                        .description(question.getDescription())
+                        .build());
+            }
+            response.add(surveysOverviewResponse.builder()
+                    .topic(survey.getTopic())
+                    .questions(questions)
+                    .build());
+        }
+
+        return response;
+    }
+
+
+    @Override
+    public List<SurveyResponse> getAllAssemblySurveys(Long assemblyId) {
+        Assembly assembly = assemblyRepository.findById(assemblyId).get();
         List<Survey> allSurveys = surveyRepository.findAllByAssembly(assembly);
         List<SurveyResponse> surveys = new ArrayList<SurveyResponse>();
         for (Survey survey : allSurveys) {

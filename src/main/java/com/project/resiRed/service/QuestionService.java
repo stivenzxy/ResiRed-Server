@@ -22,7 +22,7 @@ public interface QuestionService {
 
     MessageDto setCurrentQuestion(Long questionId);
 
-    currentQuestionResponse getCurrentQuestion();
+    currentQuestionResponse getCurrentQuestion(Long assemblyId);
 
     boolean isQuestionAlreadyVoted(Long questionId, Long userId);
     MessageDto voteQuestion(Long questionId, Long choiceId, String email);

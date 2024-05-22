@@ -1,11 +1,8 @@
 package com.project.resiRed.service;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.questionResult;
-import com.project.resiRed.dto.SurveyDto.SurveyResponse;
-import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
+import com.project.resiRed.dto.SurveyDto.*;
 
-import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
-import com.project.resiRed.dto.SurveyDto.SurveysListResponse;
 import com.project.resiRed.dto.QuestionDto.createQuestionRequest;
 import com.project.resiRed.dto.QuestionDto.questionResponse;
 
@@ -23,8 +20,10 @@ public interface SurveyService {
 
     questionResponse addQuestionToSurvey(Long surveyId, createQuestionRequest request);
 
+    List<surveysOverviewResponse> getSurveysOverview(surveysOverviewRequest request);
 
-    List<SurveyResponse> getAllAssemblySurveys();
+
+    List<SurveyResponse> getAllAssemblySurveys(Long assemblyId);
 
     List<questionResult> getSurveyResults(Long surveyId);
 

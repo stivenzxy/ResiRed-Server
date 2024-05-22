@@ -50,10 +50,10 @@ public class QuestionController {
     }
 
     @PreAuthorize("hasAuthority('OWNER')")
-    @GetMapping(value = "get/current")
-    public ResponseEntity<?> getCurrentQuestion(){
+    @GetMapping(value = "get/current/{assemblyId}")
+    public ResponseEntity<?> getCurrentQuestion(@PathVariable Long assemblyId){
 
-        return ResponseEntity.ok(questionService.getCurrentQuestion());
+        return ResponseEntity.ok(questionService.getCurrentQuestion(assemblyId));
     }
 
     @PreAuthorize("hasAuthority('OWNER')")

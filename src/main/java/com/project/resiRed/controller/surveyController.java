@@ -3,10 +3,12 @@ package com.project.resiRed.controller;
 
 
 import com.project.resiRed.dto.QuestionDto.questionResult;
+import com.project.resiRed.dto.SurveyDto.surveysOverviewRequest;
 import com.project.resiRed.service.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
@@ -60,9 +62,14 @@ public class surveyController {
 
     }
 
-    @GetMapping(value = "list/voting")
-    public ResponseEntity<?> getAllAssemblySurveys(){
-        return ResponseEntity.ok(surveyService.getAllAssemblySurveys());
+    @GetMapping("surveys/overview")
+    public ResponseEntity<?> getSurveysOverview(@RequestBody surveysOverviewRequest request){
+        return ResponseEntity.ok(surveyService.getSurveysOverview(request));
+    }
+
+    @GetMapping(value = "list/{assemblyId}")
+    public ResponseEntity<?> getAllAssemblySurveys(@PathVariable Long assemblyId){
+        return ResponseEntity.ok(surveyService.getAllAssemblySurveys(assemblyId));
     }
 
     @GetMapping(value = "{id}/list/questions/results")

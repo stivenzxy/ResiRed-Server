@@ -7,15 +7,14 @@ import com.project.resiRed.dto.MessageDto;
 import com.project.resiRed.dto.QuestionDto.currentQuestionResponse;
 
 import com.project.resiRed.dto.QuestionDto.updateQuestionRequest;
+import com.project.resiRed.entity.Assembly;
 import com.project.resiRed.entity.Choice;
 import com.project.resiRed.entity.Question;
 import com.project.resiRed.entity.User;
-import com.project.resiRed.repository.QuestionRepository;
-import com.project.resiRed.repository.ChoiceRepository;
-import com.project.resiRed.repository.UserRepository;
+import com.project.resiRed.enums.AssemblyStatus;
+import com.project.resiRed.repository.*;
 
 
-import com.project.resiRed.repository.SurveyRepository;
 import com.project.resiRed.service.QuestionService;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
-    private final SurveyRepository surveyRepository;
+    private final AssemblyRepository assemblyRepository;
     private final UserRepository userRepository;
 
     @Override
@@ -97,7 +96,9 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public currentQuestionResponse getCurrentQuestion(){
+    public currentQuestionResponse getCurrentQuestion(Long assemblyId){
+        Assembly assembly = assemblyRepository.findById(assemblyId).get();
+
         Optional<Question> currentQuestion = questionRepository.findByCanBeVoted(true);
         if(currentQuestion.isPresent()){
             List<choiceResponse> choices = new ArrayList<choiceResponse>();
@@ -107,7 +108,6 @@ public class QuestionServiceImpl implements QuestionService {
                         .description(choice.getDescription())
                         .build());
             }
-
             return currentQuestionResponse.builder()
                     .topic(currentQuestion.get().getSurvey().getTopic())
                     .questionId(currentQuestion.get().getQuestionId())
@@ -117,6 +117,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
         return null;
+
     }
 
     @Override
