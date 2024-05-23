@@ -133,6 +133,9 @@ public class AssemblyServiceImpl implements AssemblyService {
             if(IsAssemblyAvailable(assembly.get())) {
                 Random random = new Random();
                 Integer code = 100000 + random.nextInt(900000);
+                while(assemblyRepository.findByPasscode(code).isPresent()){
+                    code = 100000 + random.nextInt(900000);
+                }
                 assembly.get().setPasscode(code);
                 assemblyRepository.save(assembly.get());
                 return code;
@@ -216,6 +219,7 @@ public class AssemblyServiceImpl implements AssemblyService {
 
         Assembly assembly = assemblyRepository.findById(assemblyId).get();
         assembly.setStatus(AssemblyStatus.FINISHED);
+        assembly.setFinishedTime(LocalTime.now());
         assemblyRepository.save(assembly);
 
 

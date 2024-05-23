@@ -15,6 +15,8 @@ public interface AssemblyRepository extends JpaRepository<Assembly,Long> {
 
     Optional<Assembly> findByStatus(AssemblyStatus status);
 
+    Optional<Assembly> findByPasscode(Integer passcode);
+
 
     @Query("SELECT a FROM Assembly a WHERE a.status = 'FINISHED' or a.status = 'CANCELED'")
     List<Assembly> findAllHistory();
