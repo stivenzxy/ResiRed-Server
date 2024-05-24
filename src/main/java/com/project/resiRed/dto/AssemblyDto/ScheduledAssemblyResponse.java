@@ -13,9 +13,10 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScheduledAssemblyResponse {
-    private Boolean isPresent;
-    private Long id;
+    private Boolean isScheduled;
+    private Long assemblyId;
     private String title;
     private LocalDate date;
     private LocalTime startTime;
+    private Boolean isAvailable;
 }

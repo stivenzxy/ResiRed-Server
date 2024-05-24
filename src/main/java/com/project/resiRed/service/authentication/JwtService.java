@@ -1,4 +1,4 @@
-package com.project.resiRed.service;
+package com.project.resiRed.service.authentication;
 
 import com.project.resiRed.entity.RefreshToken;
 import com.project.resiRed.entity.User;
@@ -145,6 +145,7 @@ public class JwtService {
     }
 
     public Date getExpiration(String token) {
+
         return getClaim(token, Claims::getExpiration);
     }
 

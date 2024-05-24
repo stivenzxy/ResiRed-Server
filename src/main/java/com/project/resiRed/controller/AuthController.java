@@ -10,7 +10,7 @@ import com.project.resiRed.repository.RefreshTokenRepository;
 import com.project.resiRed.repository.UserRepository;
 import com.project.resiRed.service.AuthService;
 import com.project.resiRed.service.EmailService;
-import com.project.resiRed.service.JwtService;
+import com.project.resiRed.service.authentication.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -98,16 +98,16 @@ public class AuthController {
             }
 
             for (CSVRecord csvRecord : csvParser) {
-                    //System.out.println("ENTRO V2");
-                    RegisterRequest request = new RegisterRequest();
-                    request.setName(csvRecord.get(0));
-                    System.out.println(request.getName());
-                    request.setLastname(csvRecord.get(1));
-                    request.setAddress(csvRecord.get(2));
-                    request.setPassword(csvRecord.get(3));
-                    request.setEmail(csvRecord.get(4));
-                    authService.register(request);
-                    usersToSave.add(request);
+                //System.out.println("ENTRO V2");
+                RegisterRequest request = new RegisterRequest();
+                request.setName(csvRecord.get(0));
+                System.out.println(request.getName());
+                request.setLastname(csvRecord.get(1));
+                request.setAddress(csvRecord.get(2));
+                request.setPassword(csvRecord.get(3));
+                request.setEmail(csvRecord.get(4));
+                authService.register(request);
+                usersToSave.add(request);
             }
 
 

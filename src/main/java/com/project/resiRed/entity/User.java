@@ -44,7 +44,10 @@ public class User implements UserDetails {
     private UserRole role;
 
     @ManyToMany(mappedBy = "users")
-    private List<Assembly> assemblies;
+    private Set<Assembly> assemblies;
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Question> questions;
 
 
     @Override
