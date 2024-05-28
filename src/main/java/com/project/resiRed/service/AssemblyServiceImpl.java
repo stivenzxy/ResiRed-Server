@@ -3,14 +3,14 @@ package com.project.resiRed.service;
 
 import com.project.resiRed.dto.AssemblyDto.*;
 
+import com.project.resiRed.dto.ChoiceDto.choiceResult;
 import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.QuestionDto.questionResult;
 import com.project.resiRed.dto.SurveyDto.questionOverviewResponse;
+import com.project.resiRed.dto.SurveyDto.surveyResult;
 import com.project.resiRed.dto.SurveyDto.surveysOverviewRequest;
 import com.project.resiRed.dto.SurveyDto.surveysOverviewResponse;
-import com.project.resiRed.entity.Assembly;
-import com.project.resiRed.entity.Question;
-import com.project.resiRed.entity.Survey;
-import com.project.resiRed.entity.User;
+import com.project.resiRed.entity.*;
 import com.project.resiRed.enums.AssemblyStatus;
 import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.repository.AssemblyRepository;
@@ -109,6 +109,45 @@ public class AssemblyServiceImpl implements AssemblyService {
     }
 
     @Override
+    public ScheduledAssemblyResponse checkStartedAssembly() {
+        Optional<Assembly> assembly = assemblyRepository.findByStatus(AssemblyStatus.STARTED);
+        if (assembly.isPresent()){
+            return ScheduledAssemblyResponse.builder()
+                    .isScheduled(true)
+                    .assemblyId(assembly.get().getAssemblyId())
+                    .title(assembly.get().getTitle())
+                    .date(assembly.get().getDate())
+                    .startTime(assembly.get().getStartTime())
+                    .isAvailable(IsAssemblyAvailable(assembly.get()))
+                    .build();
+        } else{
+            return ScheduledAssemblyResponse.builder()
+                    .isScheduled(false)
+                    .build();
+        }
+    }
+
+    @Override
+    public ScheduledAssemblyResponse checkFinishedAssembly() {
+        Optional<Assembly> assembly = assemblyRepository.findByStatus(AssemblyStatus.FINISHED);
+        if (assembly.isPresent()){
+            return ScheduledAssemblyResponse.builder()
+                    .isScheduled(true)
+                    .assemblyId(assembly.get().getAssemblyId())
+                    .title(assembly.get().getTitle())
+                    .date(assembly.get().getDate())
+                    .startTime(assembly.get().getStartTime())
+                    .isAvailable(IsAssemblyAvailable(assembly.get()))
+                    .build();
+        } else{
+            return ScheduledAssemblyResponse.builder()
+                    .isScheduled(false)
+                    .build();
+        }
+    }
+
+
+    @Override
     public MessageDto cancelAssembly(Long assemblyId){
         Assembly assembly = assemblyRepository.findById(assemblyId).get();
         assembly.setStatus(AssemblyStatus.CANCELED);
@@ -178,11 +217,11 @@ public class AssemblyServiceImpl implements AssemblyService {
         if(validateCode(assemblyId, passcode)){
             addAttendee(assemblyId, user);
             return MessageDto.builder()
-                    .detail("User joined successfully")
+                    .detail("Te has unido exitosamente a la asamblea!")
                     .build();
         }
         return MessageDto.builder()
-                .detail("Wrong passcode")
+                .detail("El código ingresado es incorrecto")
                 .build();
     }
 
@@ -201,11 +240,11 @@ public class AssemblyServiceImpl implements AssemblyService {
                 assembly.get().setStatus(AssemblyStatus.STARTED);
                 assemblyRepository.save(assembly.get());
                 return MessageDto.builder()
-                        .detail("Assembly successfully started")
+                        .detail("Asamblea iniciada correctamente!")
                         .build();
             }
             return MessageDto.builder().
-                    detail("Insufficient number of attendees")
+                    detail("Aforo incompleto, aún no ha ingresado mas del 50% de los propietarios")
                     .build();
         }
         return null;
@@ -224,8 +263,39 @@ public class AssemblyServiceImpl implements AssemblyService {
 
 
         return MessageDto.builder()
-                .detail("Assembly finished")
+                .detail("Asamblea finalizada!")
                 .build();
+    }
+
+    @Override
+    public List<surveyResult> getResults(Long assemblyId) {
+
+        Assembly assembly = assemblyRepository.findById(assemblyId).get();
+
+        List<surveyResult> response = new ArrayList<surveyResult>();
+
+        for (Survey survey : assembly.getSurveys()) {
+            List<questionResult> questions = new ArrayList<questionResult>();
+            for (Question question : survey.getQuestions()) {
+                List<choiceResult> choices = new ArrayList<choiceResult>();
+                for (Choice choice : question.getChoices()) {
+                    choices.add(choiceResult.builder()
+                            .description(choice.getDescription())
+                            .votes(choice.getVotes())
+                            .build());
+                }
+                questions.add(questionResult.builder()
+                        .description(question.getDescription())
+                        .choices(choices).build()
+                );
+            }
+            response.add(surveyResult.builder()
+                    .topic(survey.getTopic())
+                    .questions(questions)
+                    .build());
+        }
+
+        return response;
     }
 
 

@@ -2,6 +2,7 @@ package com.project.resiRed.service;
 
 import com.project.resiRed.dto.AssemblyDto.*;
 import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.SurveyDto.surveyResult;
 import com.project.resiRed.dto.SurveyDto.surveysOverviewRequest;
 import com.project.resiRed.dto.SurveyDto.surveysOverviewResponse;
 import com.project.resiRed.entity.Assembly;
@@ -20,7 +21,8 @@ public interface AssemblyService {
     boolean IsAssemblyAvailable(Assembly assembly);
 
     ScheduledAssemblyResponse checkScheduledAssembly();
-
+    ScheduledAssemblyResponse checkStartedAssembly();
+    ScheduledAssemblyResponse checkFinishedAssembly();
     MessageDto cancelAssembly(Long assemblyId);
 
     Integer generateCode(Long assemblyId);
@@ -38,5 +40,6 @@ public interface AssemblyService {
     MessageDto startAssembly(Long assemblyId);
 
     MessageDto finishAssembly(Long assemblyId);
+    List<surveyResult> getResults(Long assemblyId);
 
 }

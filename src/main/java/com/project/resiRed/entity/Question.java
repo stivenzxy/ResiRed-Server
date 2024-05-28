@@ -20,7 +20,7 @@ public class Question {
     private Long questionId;
     private String description;
     private Boolean canBeVoted;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="survey_id")
     private Survey survey;
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)

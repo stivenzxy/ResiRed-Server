@@ -184,7 +184,7 @@ public class SurveyServiceImpl implements SurveyService {
         List<SurveyResponse> surveys = new ArrayList<SurveyResponse>();
         for (Survey survey : allSurveys) {
             List<questionResponse> questions = new ArrayList<questionResponse>();
-            for (Question question : survey.getQuestions()) {
+            for (Question question : questionRepository.findAllBySurveyOrdered(survey)) {
                 List<choiceResponse> choices = new ArrayList<choiceResponse>();
                 for (Choice choice : question.getChoices()) {
                     choices.add(choiceResponse.builder()

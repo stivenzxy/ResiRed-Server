@@ -63,6 +63,4 @@ public class QuestionController {
         String email = jwtService.getEmailFromToken(jwtToken);
         return ResponseEntity.ok(questionService.voteQuestion(questionId, choiceId, email));
     }
-
-
 }

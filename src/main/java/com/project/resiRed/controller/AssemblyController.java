@@ -47,6 +47,18 @@ public class AssemblyController {
         return ResponseEntity.ok(assemblyService.checkScheduledAssembly());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('OWNER')")
+    @GetMapping("check/started")
+    public ResponseEntity<?> checkStartedAssembly(){
+        return ResponseEntity.ok(assemblyService.checkStartedAssembly());
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('OWNER')")
+    @GetMapping("check/finished")
+    public ResponseEntity<?> checkFinishedAssembly(){
+        return ResponseEntity.ok(assemblyService.checkFinishedAssembly());
+    }
+
     @GetMapping("generate/passcode/{assemblyId}")
     public ResponseEntity<?> generateCode(@PathVariable Long assemblyId){
         return ResponseEntity.ok(assemblyService.generateCode(assemblyId));
@@ -63,7 +75,7 @@ public class AssemblyController {
         return ResponseEntity.ok(assemblyService.finishAssembly(assemblyId));
     }
 
-    @PreAuthorize("hasAuthority('OWNER')")
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('OWNER')")
     @GetMapping("status/{assemblyId}")
     public ResponseEntity<String> getAssemblyStatus(@PathVariable Long assemblyId){
         return ResponseEntity.ok(assemblyService.getAssemblyStatus(assemblyId));
@@ -76,6 +88,7 @@ public class AssemblyController {
     public ResponseEntity<?> joinAssembly(@PathVariable Long assemblyId, @PathVariable int passcode, @RequestHeader("Authorization") String authorizationHeader){
         String jwtToken = authorizationHeader.replace("Bearer ", "");
         String email = jwtService.getEmailFromToken(jwtToken);
+        System.out.println(email);
         return ResponseEntity.ok(assemblyService.joinAssembly(assemblyId,passcode, email));
     }
 
@@ -84,9 +97,10 @@ public class AssemblyController {
         return ResponseEntity.ok(assemblyService.startAssembly(assemblyId));
     }
 
-
-
-
-
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('OWNER')")
+    @GetMapping(value = "{assemblyId}/list/results")
+    public ResponseEntity<?> getResults(@PathVariable Long assemblyId) {
+        return ResponseEntity.ok(assemblyService.getResults(assemblyId));
+    }
 
 }

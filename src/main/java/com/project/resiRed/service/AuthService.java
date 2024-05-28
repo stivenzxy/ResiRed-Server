@@ -6,6 +6,7 @@ import com.project.resiRed.dto.AuthDto.RegisterRequest;
 import com.project.resiRed.entity.User;
 import com.project.resiRed.enums.UserRole;
 import com.project.resiRed.repository.UserRepository;
+import com.project.resiRed.service.authentication.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -27,7 +27,9 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     @Query("SELECT q FROM Question q JOIN q.users u WHERE q.questionId =:questionId AND u.userId =:userId")
     Optional<Question> findByQuestionIdAndUserId(Long questionId, Long userId);
 
+    @Query("SELECT q FROM Question q JOIN q.survey s WHERE q.survey=:survey ORDER BY q.questionId ASC")
 
+    List<Question> findAllBySurveyOrdered(Survey survey);
 
     @Modifying
     @Transactional

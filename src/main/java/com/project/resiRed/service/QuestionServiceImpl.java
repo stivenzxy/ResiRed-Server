@@ -133,7 +133,7 @@ public class QuestionServiceImpl implements QuestionService {
         User user = userRepository.findUserByEmail(email).get();
 
         if(isQuestionAlreadyVoted(questionId, user.getUserId())){
-            return MessageDto.builder().detail("Question cannot be voted twice").build();
+            return MessageDto.builder().detail("No puedes votar dos veces sobre la misma pregunta").build();
         }
 
         Question question = questionRepository.findById(questionId).get();
@@ -145,7 +145,7 @@ public class QuestionServiceImpl implements QuestionService {
         questionRepository.save(question);
 
 
-        return MessageDto.builder().detail("Question Voted").build();
+        return MessageDto.builder().detail("Voto guardado exitosamente").build();
     }
 
 

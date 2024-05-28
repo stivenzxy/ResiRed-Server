@@ -14,7 +14,7 @@ public class Choice {
     private Long choiceId;
     private String description;
     private int votes;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="question_id")
     private Question question;
 
